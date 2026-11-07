@@ -1,0 +1,67 @@
+name: Free asset pipeline (Blender)
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/free-asset-pipeline.yml'
+      - 'tools/build_assets.py'
+      - 'tools/build_audio.py'
+      - 'tools/validate_assets.py'
+      - 'tools/build_guardian_spirit.py'
+      - 'tools/validate_guardian_spirit.py'
+      - 'assets/guardians/**'
+  pull_request:
+    paths:
+      - '.github/workflows/free-asset-pipeline.yml'
+      - 'tools/build_assets.py'
+      - 'tools/build_audio.py'
+      - 'tools/validate_assets.py'
+      - 'tools/build_guardian_spirit.py'
+      - 'tools/validate_guardian_spirit.py'
+      - 'assets/guardians/**'
+
+permissions:
+  contents: read
+
+jobs:
+  build-assets:
+    name: Generate and validate 3D assets
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Install free Blender 4.3.2
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/blender"
+          curl --fail --location --retry 3 \
+            "https://download.blender.org/release/Blender4.3/blender-4.3.2-linux-x64.tar.xz" \
+            --output "$RUNNER_TEMP/blender.tar.xz"
+          tar --extract --xz --file "$RUNNER_TEMP/blender.tar.xz" \
+            --directory "$RUNNER_TEMP/blender" --strip-components=1
+          echo "$RUNNER_TEMP/blender" >> "$GITHUB_PATH"
+          "$RUNNER_TEMP/blender/blender" --version
+      - name: Rebuild original folklore GLBs
+        run: blender --background --factory-startup --python tools/build_assets.py
+      - name: Validate original 12 GLBs
+        run: python3 tools/validate_assets.py
+      - name: Generate Spirit GLB with six animations
+        run: blender --background --factory-startup --python tools/build_guardian_spirit.py
+      - name: Validate Spirit GLB, PBR, rig and clips
+        run: python3 tools/validate_guardian_spirit.py
+      - name: Rebuild synthesized audio
+        run: python3 tools/build_audio.py
+      - name: Upload generated GLBs and receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: folklore-and-guardian-assets
+          if-no-files-found: warn
+          retention-days: 7
+          path: |
+            assets/models/*.glb
+            assets/guardians/*.glb
+            build/*.json
