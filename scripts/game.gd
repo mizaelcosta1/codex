@@ -1,6 +1,7 @@
 extends Node3D
 const PlayerScript = preload("res://scripts/player.gd")
 const EnemyScript = preload("res://scripts/enemy.gd")
+const GuardianAssetCatalog = preload("res://scripts/guardian_asset_catalog.gd")
 var state = "menu"
 var world: Node3D
 var player
@@ -8,6 +9,7 @@ var boss
 var camera: Camera3D
 var hud
 var models: Dictionary = {}
+var guardian_models: Dictionary = {}
 var materials: Dictionary = {}
 var enemies: Array = []
 var shrines: Array = []
@@ -30,6 +32,7 @@ func _ready():
 	setup_input()
 	load_settings()
 	for name in ["curupira","saci","cuca","iara","boitata","arvore","pedra","samambaia","altar","ponte","cabana","orbe"]: models[name] = load("res://assets/models/"+name+".glb")
+	guardian_models = GuardianAssetCatalog.load_available()
 	build_environment()
 	build_level()
 	hud = load("res://scripts/hud.gd").new()
