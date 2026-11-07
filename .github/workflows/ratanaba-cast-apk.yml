@@ -145,7 +145,7 @@ jobs:
             cp build/SHA256SUMS.txt downloads/SHA256SUMS-v0.3.0.txt
             git config user.name 'github-actions[bot]'
             git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-            git add "downloads/$APK_NAME" downloads/SHA256SUMS-v0.2.0-preview.txt
+            git add "downloads/$APK_NAME" downloads/SHA256SUMS-v0.3.0.txt assets/ratanaba/*.glb
             if ! git diff --cached --quiet; then
               git commit -m "build: publish v0.2.0 preview APK [skip ci]"
               git push origin HEAD:feature/guardians-v0.2-asset-pipeline
