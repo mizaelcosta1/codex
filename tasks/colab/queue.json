@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "jobs": [
+    {
+      "id": "banido-v003-preview",
+      "kind": "banido_v003",
+      "enabled": true
+    }
+  ]
+}
