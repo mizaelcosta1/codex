@@ -3,6 +3,8 @@ const PlayerScript = preload("res://scripts/player.gd")
 const EnemyScript = preload("res://scripts/enemy.gd")
 const GuardianAssetCatalog = preload("res://scripts/guardian_asset_catalog.gd")
 const GuardianShowcaseScript = preload("res://scripts/guardian_showcase.gd")
+const CastCatalog = preload("res://scripts/ratanaba_cast_catalog.gd")
+const CastShowcase = preload("res://scripts/ratanaba_cast_showcase.gd")
 var state = "menu"
 var world: Node3D
 var player
@@ -12,6 +14,7 @@ var hud
 var models: Dictionary = {}
 var guardian_models: Dictionary = {}
 var guardian_showcase: Node3D
+var ratanaba_cast_gallery: Node3D
 var materials: Dictionary = {}
 var enemies: Array = []
 var shrines: Array = []
@@ -226,6 +229,12 @@ func build_level():
 	guardian_showcase.position = Vector3(0,0,10)
 	world.add_child(guardian_showcase)
 	guardian_showcase.populate(guardian_models)
+	# Nova galeria de personagens autorais, isolada do gameplay e sem colisoes.
+	ratanaba_cast_gallery = CastShowcase.new()
+	ratanaba_cast_gallery.name = "RatanabaCastGallery"
+	ratanaba_cast_gallery.position = Vector3(0, 0, -25)
+	world.add_child(ratanaba_cast_gallery)
+	ratanaba_cast_gallery.populate(CastCatalog.load_available())
 	player = PlayerScript.new()
 	player.game = self
 	world.add_child(player)

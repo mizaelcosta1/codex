@@ -1,0 +1,168 @@
+name: Ratanaba v0.3.0 cast Android APK (Blender + Godot)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/guardians-v0.2-asset-pipeline
+    paths:
+      - '.github/workflows/ratanaba-cast-apk.yml'
+      - 'tools/build_ratanaba_cast.py'
+      - 'tools/validate_ratanaba_cast.py'
+      - 'scripts/ratanaba_cast_catalog.gd'
+      - 'scripts/ratanaba_cast_showcase.gd'
+      - 'scripts/player.gd'
+      - 'scripts/game.gd'
+      - 'tests/test_ratanaba_cast.gd'
+
+permissions:
+  contents: write
+
+jobs:
+  android-debug:
+    name: Build signed debug APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      GODOT_VERSION: '4.6.3'
+      APK_NAME: 'ratanaba-guardians-v0.3.0-debug.apk'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Install SDK components using preinstalled Android SDK
+        shell: bash
+        run: |
+          set -euo pipefail
+          export ANDROID_HOME="${ANDROID_HOME:-/usr/local/lib/android/sdk}"
+          export ANDROID_SDK_ROOT="$ANDROID_HOME"
+          echo "ANDROID_HOME=$ANDROID_HOME" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=$ANDROID_HOME" >> "$GITHUB_ENV"
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null || true
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install "platform-tools" "platforms;android-35" "build-tools;35.0.1"
+          test -x "$ANDROID_HOME/platform-tools/adb"
+          test -x "$ANDROID_HOME/build-tools/35.0.1/apksigner"
+          test -x "$ANDROID_HOME/build-tools/35.0.1/zipalign"
+      - name: Download Godot 4.6.3
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 \
+            "https://github.com/godotengine/godot/releases/download/$GODOT_VERSION-stable/Godot_v$GODOT_VERSION-stable_linux.x86_64.zip" \
+            --output "$RUNNER_TEMP/godot.zip"
+          unzip -q "$RUNNER_TEMP/godot.zip" -d "$RUNNER_TEMP"
+          chmod +x "$RUNNER_TEMP/Godot_v$GODOT_VERSION-stable_linux.x86_64"
+          echo "$RUNNER_TEMP" >> "$GITHUB_PATH"
+      - name: Download matching official export templates
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 \
+            "https://github.com/godotengine/godot/releases/download/$GODOT_VERSION-stable/Godot_v$GODOT_VERSION-stable_export_templates.tpz" \
+            --output "$RUNNER_TEMP/godot-templates.tpz"
+          mkdir -p "$RUNNER_TEMP/godot-templates"
+          unzip -q "$RUNNER_TEMP/godot-templates.tpz" -d "$RUNNER_TEMP/godot-templates"
+          mkdir -p "$HOME/.local/share/godot/export_templates/$GODOT_VERSION.stable"
+          cp -a "$RUNNER_TEMP/godot-templates/templates/." \
+            "$HOME/.local/share/godot/export_templates/$GODOT_VERSION.stable/"
+          test -s "$HOME/.local/share/godot/export_templates/$GODOT_VERSION.stable/android_debug.apk"
+      - name: Generate temporary signing key (not committed)
+        shell: bash
+        run: |
+          set -euo pipefail
+          keytool -genkeypair -keystore "$RUNNER_TEMP/android-debug.jks" \
+            -storepass android -keypass android -alias androiddebugkey \
+            -keyalg RSA -keysize 2048 -validity 3650 \
+            -dname "CN=Android Debug,O=Guardioes da Mata Preview,C=BR" -noprompt
+          echo "GODOT_ANDROID_KEYSTORE_DEBUG_PATH=$RUNNER_TEMP/android-debug.jks" >> "$GITHUB_ENV"
+          echo "GODOT_ANDROID_KEYSTORE_DEBUG_USER=androiddebugkey" >> "$GITHUB_ENV"
+          echo "GODOT_ANDROID_KEYSTORE_DEBUG_PASSWORD=android" >> "$GITHUB_ENV"
+      - name: Install Blender 4.3.2 (no-cost open source)
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/blender"
+          curl --fail --location --retry 3 \
+            "https://download.blender.org/release/Blender4.3/blender-4.3.2-linux-x64.tar.xz" \
+            --output "$RUNNER_TEMP/blender.tar.xz"
+          tar --extract --xz --file "$RUNNER_TEMP/blender.tar.xz" \
+            --directory "$RUNNER_TEMP/blender" --strip-components=1
+          echo "$RUNNER_TEMP/blender" >> "$GITHUB_PATH"
+      - name: Generate original rigged PBR cast
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile tools/build_ratanaba_cast.py tools/validate_ratanaba_cast.py
+          blender -b --factory-startup --python tools/build_ratanaba_cast.py
+          python3 tools/validate_ratanaba_cast.py
+      - name: Import GLBs and other resources
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p build
+          Godot_v$GODOT_VERSION-stable_linux.x86_64 --headless --path . --editor --import --quit
+      - name: Regression tests before export
+        shell: bash
+        run: |
+          set -euo pipefail
+          Godot_v$GODOT_VERSION-stable_linux.x86_64 --headless --path . --script res://tests/test_guardian_asset_catalog.gd
+          Godot_v$GODOT_VERSION-stable_linux.x86_64 --headless --path . --script res://tests/test_guardian_showcase.gd
+          Godot_v$GODOT_VERSION-stable_linux.x86_64 --headless --path . --script res://tests/test_loading_screen.gd
+          Godot_v$GODOT_VERSION-stable_linux.x86_64 --headless --path . --script res://tests/test_ratanaba_cast.gd
+          Godot_v$GODOT_VERSION-stable_linux.x86_64 --headless --path . --fixed-fps 60 --script res://tests/test_game.gd
+      - name: Export Android debug APK
+        shell: bash
+        run: |
+          set -euo pipefail
+          Godot_v$GODOT_VERSION-stable_linux.x86_64 --headless --path . \
+            --export-debug Android "build/$APK_NAME"
+          test -s "build/$APK_NAME"
+      - name: Verify APK signature and package
+        shell: bash
+        run: |
+          set -euo pipefail
+          TOOLS="$ANDROID_HOME/build-tools/35.0.1"
+          unzip -t "build/$APK_NAME" | tail -n 2
+          "$TOOLS/zipalign" -c -v 4 "build/$APK_NAME"
+          "$TOOLS/apksigner" verify --verbose --print-certs "build/$APK_NAME"
+          "$TOOLS/aapt" dump badging "build/$APK_NAME" | grep -m 1 "package: "
+          "$TOOLS/aapt" dump badging "build/$APK_NAME" | grep -q "name='br.com.guardioesdamata.preview'"
+          sha256sum "build/$APK_NAME" | tee build/SHA256SUMS.txt
+          stat -c 'APK_BYTES=%s' "build/$APK_NAME"
+      - name: Publish to development branch only
+        if: github.event_name == 'push' && github.ref == 'refs/heads/feature/guardians-v0.2-asset-pipeline'
+        shell: bash
+        run: |
+          set -euo pipefail
+          bytes=$(stat -c '%s' "build/$APK_NAME")
+          if [ "$bytes" -lt 90000000 ]; then
+            mkdir -p downloads
+            cp "build/$APK_NAME" "downloads/$APK_NAME"
+            cp build/SHA256SUMS.txt downloads/SHA256SUMS-v0.3.0.txt
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add "downloads/$APK_NAME" downloads/SHA256SUMS-v0.2.0-preview.txt
+            if ! git diff --cached --quiet; then
+              git commit -m "build: publish v0.2.0 preview APK [skip ci]"
+              git push origin HEAD:feature/guardians-v0.2-asset-pipeline
+            fi
+          else
+            echo "APK too large to publish in Git; use Actions artifact."
+          fi
+      - name: Upload installable APK
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ratanaba-guardians-v0.3.0-android-debug
+          if-no-files-found: warn
+          retention-days: 30
+          path: |
+            build/*.apk
+            build/SHA256SUMS.txt
+            build/test_results.json
+            build/ratanaba_cast_report.json
+            build/ratanaba_cast_validation.json

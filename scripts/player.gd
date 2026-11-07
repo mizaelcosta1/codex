@@ -19,7 +19,9 @@ func _ready():
 	shape.shape = capsule
 	shape.position.y = .8
 	add_child(shape)
-	visual = load("res://assets/models/curupira.glb").instantiate()
+	var character_path := "res://assets/ratanaba/o_banido.glb"
+	# Preserva Curupira como fallback caso o novo asset nao esteja instalado.
+	visual = load(character_path).instantiate() if ResourceLoader.exists(character_path) else load("res://assets/models/curupira.glb").instantiate()
 	add_child(visual)
 	visual.rotation.y = PI
 	animation = find_animation(visual)
