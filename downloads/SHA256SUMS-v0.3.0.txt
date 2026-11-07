@@ -1,0 +1,1 @@
+a1b06a13b9a880b8e73e7cd4baf48f42fe8451878da4fb2acf42474b0c9df44f  build/ratanaba-guardians-v0.3.0-debug.apk
