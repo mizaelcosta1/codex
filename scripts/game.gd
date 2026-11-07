@@ -1,6 +1,8 @@
 extends Node3D
 const PlayerScript = preload("res://scripts/player.gd")
 const EnemyScript = preload("res://scripts/enemy.gd")
+const GuardianAssetCatalog = preload("res://scripts/guardian_asset_catalog.gd")
+const GuardianShowcaseScript = preload("res://scripts/guardian_showcase.gd")
 var state = "menu"
 var world: Node3D
 var player
@@ -8,6 +10,8 @@ var boss
 var camera: Camera3D
 var hud
 var models: Dictionary = {}
+var guardian_models: Dictionary = {}
+var guardian_showcase: Node3D
 var materials: Dictionary = {}
 var enemies: Array = []
 var shrines: Array = []
@@ -30,6 +34,7 @@ func _ready():
 	setup_input()
 	load_settings()
 	for name in ["curupira","saci","cuca","iara","boitata","arvore","pedra","samambaia","altar","ponte","cabana","orbe"]: models[name] = load("res://assets/models/"+name+".glb")
+	guardian_models = GuardianAssetCatalog.load_available()
 	build_environment()
 	build_level()
 	hud = load("res://scripts/hud.gd").new()
@@ -215,6 +220,12 @@ func build_level():
 		model("pedra",world,Vector3(cos(angle)*30,0,sin(angle)*30),rng.randf_range(1,2))
 	for x in [-33,33]: solid_box(Vector3(x,2,0),Vector3(1,6,68),ground,false)
 	for z in [-33,33]: solid_box(Vector3(0,2,z),Vector3(68,6,1),ground,false)
+	# Vitrine opcional: nao altera colisoes, IA ou santuarios.
+	guardian_showcase = GuardianShowcaseScript.new()
+	guardian_showcase.name = "GuardioesAncestrais"
+	guardian_showcase.position = Vector3(0,0,10)
+	world.add_child(guardian_showcase)
+	guardian_showcase.populate(guardian_models)
 	player = PlayerScript.new()
 	player.game = self
 	world.add_child(player)
