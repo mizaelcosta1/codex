@@ -1,0 +1,138 @@
+{
+  "project": "Ratanabá Guardians: O Banido",
+  "scene": "Prólogo de ação - O Exílio e a Queda dos Guardiões",
+  "duration_seconds": 20,
+  "fps": 24,
+  "total_frames": 480,
+  "video_status": "roteiro_fechado; filmagem/animação final ainda não gerada",
+  "visual_style": "photoreal cinematic dark fantasy, Brazilian Amazon techno-mystical ruins, volumetric lighting",
+  "subject": "Banido: dreadlocks, dark trousers, turquoise body runes, wood mace; no sword",
+  "canon_guardians": [
+    "Curupira",
+    "Boitatá",
+    "Mula sem Cabeça",
+    "Boto",
+    "Matinta Pereira"
+  ],
+  "shots": [
+    {
+      "in": 0,
+      "out": 43,
+      "seconds": [
+        0,
+        1.8
+      ],
+      "scene": "Ratanabá viva",
+      "action": "Travelling aéreo rasante entre pirâmides geométricas e canais suspensos",
+      "voice": "Antes do esquecimento, Ratanabá era luz."
+    },
+    {
+      "in": 43,
+      "out": 84,
+      "seconds": [
+        1.8,
+        3.5
+      ],
+      "scene": "Sacrifício do Banido",
+      "action": "Entropia negro-rubra é absorvida no peito; marcas turquesa incandescentes",
+      "voice": "Acolhi em mim a Entropia."
+    },
+    {
+      "in": 84,
+      "out": 115,
+      "seconds": [
+        3.5,
+        4.8
+      ],
+      "scene": "Exílio",
+      "action": "Cinco silhuetas apagam seu nome; selo pentagonal; aceitação",
+      "voice": "Meus irmãos me baniram."
+    },
+    {
+      "in": 115,
+      "out": 154,
+      "seconds": [
+        4.8,
+        6.4
+      ],
+      "scene": "O despertar",
+      "action": "Banido retoma clava e salta entre ruínas; câmera acompanha"
+    },
+    {
+      "in": 154,
+      "out": 197,
+      "seconds": [
+        6.4,
+        8.2
+      ],
+      "scene": "Curupira",
+      "action": "Esquiva em floresta invertida; bloqueio de raízes temporais"
+    },
+    {
+      "in": 197,
+      "out": 235,
+      "seconds": [
+        8.2,
+        9.8
+      ],
+      "scene": "Boitatá",
+      "action": "Serpente de obsidiana e fogo psíquico azul; rolamento e golpe em cristal"
+    },
+    {
+      "in": 235,
+      "out": 274,
+      "seconds": [
+        9.8,
+        11.4
+      ],
+      "scene": "Mula sem Cabeça",
+      "action": "Investida de patas de ferro e fogo azul; deslize sob carga"
+    },
+    {
+      "in": 274,
+      "out": 312,
+      "seconds": [
+        11.4,
+        13
+      ],
+      "scene": "Boto",
+      "action": "Cavaleiro ilusório vira leviatã esquelético sob água negra"
+    },
+    {
+      "in": 312,
+      "out": 353,
+      "seconds": [
+        13,
+        14.7
+      ],
+      "scene": "Matinta Pereira",
+      "action": "Névoa cega; assobio direcional; defesa por reflexo"
+    },
+    {
+      "in": 353,
+      "out": 420,
+      "seconds": [
+        14.7,
+        17.5
+      ],
+      "scene": "Libertação",
+      "action": "Órbita 270°, cinco essências, onda purificadora turquesa",
+      "voice": "Não voltei por vingança. Voltei para libertá-los."
+    },
+    {
+      "in": 420,
+      "out": 480,
+      "seconds": [
+        17.5,
+        20
+      ],
+      "scene": "Trono do Esquecido",
+      "action": "Banido absorve cinco fragmentos, fecha os olhos; luz residual",
+      "voice": "Eu sou o Banido."
+    }
+  ],
+  "negative_prompt": "extra limbs, duplicate protagonists, sword replacing mace, incorrect canonical guardians, red psychic serpent flame, head on headless horse, baked subtitles, copyrighted soundtrack, cartoon, anime",
+  "video_provider_note": "One free Genjutsu video job was used earlier. No additional free Genjutsu job available at the latest check; do not submit a paid video job without authorization.",
+  "integration": "Keep current 6s video until 20s footage is complete and Godot-compatible OGV is validated. Use threaded progress UI; provide Skip Intro once loading is done.",
+  "source_reference": "User-provided cinematic guardiões poster (look/ruins only) + Banido full-body reference"
+}
