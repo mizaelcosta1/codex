@@ -102,7 +102,7 @@ def oval(assigned,name,point,size,mat,bone,detail=32):
 def rod(assigned,name,a,b,r1,r2,mat,bone,sides=20):
     a,b=Vector(a),Vector(b)
     v=b-a
-    bpy.ops.mesh.primitive_cone_add(vertices=sides,segments=3,
+    bpy.ops.mesh.primitive_cone_add(vertices=sides,
         radius1=r1,radius2=r2,depth=v.length,location=(a+b)*.5)
     ob=bpy.context.object
     ob.name="GEO_"+name
