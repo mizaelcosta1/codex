@@ -9,7 +9,9 @@ on:
       - 'tools/build_audio.py'
       - 'tools/validate_assets.py'
       - 'tools/build_guardian_spirit.py'
+      - 'tools/build_guardian_roster.py'
       - 'tools/validate_guardian_spirit.py'
+      - 'tools/validate_guardian_roster.py'
       - 'assets/guardians/**'
   pull_request:
     paths:
@@ -18,11 +20,13 @@ on:
       - 'tools/build_audio.py'
       - 'tools/validate_assets.py'
       - 'tools/build_guardian_spirit.py'
+      - 'tools/build_guardian_roster.py'
       - 'tools/validate_guardian_spirit.py'
+      - 'tools/validate_guardian_roster.py'
       - 'assets/guardians/**'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build-assets:
@@ -44,6 +48,8 @@ jobs:
             --directory "$RUNNER_TEMP/blender" --strip-components=1
           echo "$RUNNER_TEMP/blender" >> "$GITHUB_PATH"
           "$RUNNER_TEMP/blender/blender" --version
+      - name: Check generator Python syntax
+        run: python3 -m py_compile tools/build_guardian_spirit.py tools/build_guardian_roster.py tools/validate_guardian_spirit.py tools/validate_guardian_roster.py
       - name: Rebuild original folklore GLBs
         run: blender --background --factory-startup --python tools/build_assets.py
       - name: Validate original 12 GLBs
@@ -52,8 +58,24 @@ jobs:
         run: blender --background --factory-startup --python tools/build_guardian_spirit.py
       - name: Validate Spirit GLB, PBR, rig and clips
         run: python3 tools/validate_guardian_spirit.py
+      - name: Generate four other guardian GLBs
+        run: blender --background --factory-startup --python tools/build_guardian_roster.py
+      - name: Validate other guardian GLBs
+        run: python3 tools/validate_guardian_roster.py
       - name: Rebuild synthesized audio
         run: python3 tools/build_audio.py
+      - name: Publish validated guardian GLBs to development branch
+        if: github.ref == 'refs/heads/feature/guardians-v0.2-asset-pipeline' && github.event_name == 'push'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/guardians/*.glb
+          if ! git diff --cached --quiet; then
+            git commit -m 'Build five procedural guardian GLBs [skip ci]'
+            git push origin HEAD:feature/guardians-v0.2-asset-pipeline
+          fi
       - name: Upload generated GLBs and receipts
         if: always()
         uses: actions/upload-artifact@v4
