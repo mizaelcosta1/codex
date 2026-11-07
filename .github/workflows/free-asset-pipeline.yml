@@ -12,6 +12,7 @@ on:
       - 'tools/build_guardian_roster.py'
       - 'tools/validate_guardian_spirit.py'
       - 'tools/validate_guardian_roster.py'
+      - 'tools/check_tripo_candidate.py'
       - 'assets/guardians/**'
   pull_request:
     paths:
@@ -26,7 +27,7 @@ on:
       - 'assets/guardians/**'
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   build-assets:
@@ -54,33 +55,18 @@ jobs:
         run: blender --background --factory-startup --python tools/build_assets.py
       - name: Validate original 12 GLBs
         run: python3 tools/validate_assets.py
-      - name: Generate Spirit GLB with six animations
-        run: blender --background --factory-startup --python tools/build_guardian_spirit.py
-      - name: Validate Spirit GLB, PBR, rig and clips
+      # Production GLBs are source-controlled. Never regenerate over Tripo assets.
+      - name: Validate committed Spirit GLB, PBR, rig and clips
         run: python3 tools/validate_guardian_spirit.py
-      - name: Generate four other guardian GLBs
-        run: blender --background --factory-startup --python tools/build_guardian_roster.py
-      - name: Validate other guardian GLBs
+      - name: Validate other committed guardian GLBs
         run: python3 tools/validate_guardian_roster.py
       - name: Rebuild synthesized audio
         run: python3 tools/build_audio.py
-      - name: Publish validated guardian GLBs to development branch
-        if: github.ref == 'refs/heads/feature/guardians-v0.2-asset-pipeline' && github.event_name == 'push'
-        shell: bash
-        run: |
-          set -euo pipefail
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add assets/guardians/*.glb
-          if ! git diff --cached --quiet; then
-            git commit -m 'Build five procedural guardian GLBs [skip ci]'
-            git push origin HEAD:feature/guardians-v0.2-asset-pipeline
-          fi
-      - name: Upload generated GLBs and receipts
+      - name: Upload validation reports and committed GLBs
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: folklore-and-guardian-assets
+          name: committed-guardian-validation
           if-no-files-found: warn
           retention-days: 7
           path: |

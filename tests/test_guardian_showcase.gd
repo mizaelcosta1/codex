@@ -30,7 +30,15 @@ func _run() -> void:
 		verify(exhibit.animations.has(name), "AnimationPlayer: " + name)
 		if exhibit.animations.has(name):
 			var player: AnimationPlayer = exhibit.animations[name]
-			verify(player.get_animation_list().size() >= 6, "Seis clips: " + name)
+			var clips: PackedStringArray = player.get_animation_list()
+			verify(clips.size() >= 6, "Seis clips: " + name)
+			for expected_clip in Catalog.spec(name).get("clips", []):
+				var found: bool = false
+				for clip_name in clips:
+					if String(clip_name).to_lower().ends_with(String(expected_clip).to_lower()):
+						found = true
+						break
+				verify(found, "Clip " + str(expected_clip) + ": " + name)
 	verify(exhibit.get_child_count() == 5, "Vitrine sem placeholders")
 	print("GUARDIAN_SHOWCASE_RESULT ", checks - failures, "/", checks)
 	exhibit.queue_free()
