@@ -1,0 +1,9 @@
+{
+  "bytes": 57230694,
+  "sha256": "57c70812382cf8cad77c09e43d32bdcb72b3037662cab6defeac7ddd912b1e05",
+  "architectures": [
+    "arm64-v8a",
+    "x86_64"
+  ],
+  "zip_integrity": "passed"
+}

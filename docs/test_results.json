@@ -1,0 +1,171 @@
+{
+	"checks": [
+		{
+			"name": "menu inicial",
+			"passed": true
+		},
+		{
+			"name": "Voltar do Android é tratado pelo jogo",
+			"passed": true
+		},
+		{
+			"name": "12 modelos GLB importados",
+			"passed": true
+		},
+		{
+			"name": "rig e AnimationPlayer importados",
+			"passed": true
+		},
+		{
+			"name": "clips de animação presentes",
+			"passed": true
+		},
+		{
+			"name": "início da partida",
+			"passed": true
+		},
+		{
+			"name": "colisão com o chão",
+			"passed": true
+		},
+		{
+			"name": "proteção da Cuca",
+			"passed": true
+		},
+		{
+			"name": "movimento real por física",
+			"passed": true
+		},
+		{
+			"name": "orientação visual acompanha movimento",
+			"passed": true
+		},
+		{
+			"name": "limite do mapa",
+			"passed": true
+		},
+		{
+			"name": "pulo aceito no chão",
+			"passed": true
+		},
+		{
+			"name": "pulo sobe",
+			"passed": true
+		},
+		{
+			"name": "pulo retorna ao chão",
+			"passed": true
+		},
+		{
+			"name": "esquiva consome energia",
+			"passed": true
+		},
+		{
+			"name": "invulnerabilidade da esquiva",
+			"passed": true
+		},
+		{
+			"name": "dano recebido",
+			"passed": true
+		},
+		{
+			"name": "joystick por toque",
+			"passed": true
+		},
+		{
+			"name": "multitouch: mover e atacar",
+			"passed": true
+		},
+		{
+			"name": "liberação do joystick",
+			"passed": true
+		},
+		{
+			"name": "pausa congela tempo",
+			"passed": true
+		},
+		{
+			"name": "pausa limpa toque",
+			"passed": true
+		},
+		{
+			"name": "cura da Iara",
+			"passed": true
+		},
+		{
+			"name": "cura com cooldown",
+			"passed": true
+		},
+		{
+			"name": "coleta de semente",
+			"passed": true
+		},
+		{
+			"name": "projétil atinge jogador",
+			"passed": true
+		},
+		{
+			"name": "Boitatá patrulha",
+			"passed": true
+		},
+		{
+			"name": "restaurar santuário",
+			"passed": true
+		},
+		{
+			"name": "santuário sem duplicação",
+			"passed": true
+		},
+		{
+			"name": "restaurar santuário",
+			"passed": true
+		},
+		{
+			"name": "santuário sem duplicação",
+			"passed": true
+		},
+		{
+			"name": "restaurar santuário",
+			"passed": true
+		},
+		{
+			"name": "santuário sem duplicação",
+			"passed": true
+		},
+		{
+			"name": "três objetivos concluídos",
+			"passed": true
+		},
+		{
+			"name": "Cuca dispara ao perceber jogador",
+			"passed": true
+		},
+		{
+			"name": "combate gera vitória",
+			"passed": true
+		},
+		{
+			"name": "melhor tempo registrado",
+			"passed": true
+		},
+		{
+			"name": "reinício limpa estado",
+			"passed": true
+		},
+		{
+			"name": "derrota",
+			"passed": true
+		},
+		{
+			"name": "nova tentativa",
+			"passed": true
+		},
+		{
+			"name": "controle de áudio",
+			"passed": true
+		}
+	],
+	"engine": "4.6.3-stable (official)",
+	"failed": 0,
+	"passed": 41
+}

@@ -1,0 +1,25 @@
+{
+  "engine": "Godot 4.6.3",
+  "android": "10 / API 29 x86_64",
+  "backend": "ANGLE 2.1 / SwiftShader 5 / GLES 3.1",
+  "final_apk_sha256": "57c70812382cf8cad77c09e43d32bdcb72b3037662cab6defeac7ddd912b1e05",
+  "final_apk": {
+    "installed": true,
+    "started_by_touch": true,
+    "android_back_opens_pause": true,
+    "process_alive_after_back": true,
+    "screenshot": "images/android-pause.png"
+  },
+  "candidate_before_isolated_back_fix": {
+    "rendered_menu_and_3d_scene": true,
+    "started_by_touch": true,
+    "joystick_changed_character_direction_and_position": true,
+    "screenshot": "images/android-gameplay.png"
+  },
+  "limitations": [
+    "No physical device tested",
+    "No FPS target measured",
+    "No full manual campaign",
+    "System UI ANR under unaccelerated emulation"
+  ]
+}

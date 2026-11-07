@@ -1,0 +1,26 @@
+[
+	{
+		"physics_frames": 294,
+		"reached": true,
+		"target": [
+			-18.0,
+			0.0
+		]
+	},
+	{
+		"physics_frames": 278,
+		"reached": true,
+		"target": [
+			0.0,
+			-17.0
+		]
+	},
+	{
+		"physics_frames": 302,
+		"reached": true,
+		"target": [
+			17.0,
+			4.0
+		]
+	}
+]

@@ -1,0 +1,86 @@
+[
+  {
+    "name": "curupira",
+    "triangles": 6804,
+    "meshes": 1,
+    "budget": 20000,
+    "bytes": 298252
+  },
+  {
+    "name": "saci",
+    "triangles": 4828,
+    "meshes": 1,
+    "budget": 20000,
+    "bytes": 218328
+  },
+  {
+    "name": "cuca",
+    "triangles": 7496,
+    "meshes": 1,
+    "budget": 20000,
+    "bytes": 323528
+  },
+  {
+    "name": "iara",
+    "triangles": 5512,
+    "meshes": 1,
+    "budget": 20000,
+    "bytes": 237988
+  },
+  {
+    "name": "boitata",
+    "triangles": 3700,
+    "meshes": 1,
+    "budget": 20000,
+    "bytes": 89000
+  },
+  {
+    "name": "arvore",
+    "triangles": 2436,
+    "meshes": 1,
+    "budget": 20000,
+    "bytes": 65192
+  },
+  {
+    "name": "pedra",
+    "triangles": 216,
+    "meshes": 1,
+    "budget": 20000,
+    "bytes": 7092
+  },
+  {
+    "name": "samambaia",
+    "triangles": 5184,
+    "meshes": 1,
+    "budget": 20000,
+    "bytes": 144232
+  },
+  {
+    "name": "altar",
+    "triangles": 276,
+    "meshes": 1,
+    "budget": 20000,
+    "bytes": 13880
+  },
+  {
+    "name": "ponte",
+    "triangles": 368,
+    "meshes": 1,
+    "budget": 20000,
+    "bytes": 17828
+  },
+  {
+    "name": "cabana",
+    "triangles": 180,
+    "meshes": 1,
+    "budget": 20000,
+    "bytes": 13892
+  },
+  {
+    "name": "orbe",
+    "triangles": 216,
+    "meshes": 1,
+    "budget": 20000,
+    "bytes": 7092
+  }
+]

@@ -1,0 +1,102 @@
+[
+  {
+    "asset": "curupira.glb",
+    "triangles": 6804,
+    "clips": [
+      "curupira_Idle",
+      "curupira_Walk",
+      "curupira_Attack"
+    ],
+    "skin_weights_valid": true,
+    "passed": true
+  },
+  {
+    "asset": "saci.glb",
+    "triangles": 4828,
+    "clips": [
+      "saci_Idle",
+      "saci_Walk",
+      "saci_Attack"
+    ],
+    "skin_weights_valid": true,
+    "passed": true
+  },
+  {
+    "asset": "cuca.glb",
+    "triangles": 7496,
+    "clips": [
+      "cuca_Idle",
+      "cuca_Walk",
+      "cuca_Attack"
+    ],
+    "skin_weights_valid": true,
+    "passed": true
+  },
+  {
+    "asset": "iara.glb",
+    "triangles": 5512,
+    "clips": [
+      "iara_Idle",
+      "iara_Walk",
+      "iara_Attack"
+    ],
+    "skin_weights_valid": true,
+    "passed": true
+  },
+  {
+    "asset": "boitata.glb",
+    "triangles": 3700,
+    "clips": [],
+    "skin_weights_valid": false,
+    "passed": true
+  },
+  {
+    "asset": "arvore.glb",
+    "triangles": 2436,
+    "clips": [],
+    "skin_weights_valid": false,
+    "passed": true
+  },
+  {
+    "asset": "pedra.glb",
+    "triangles": 216,
+    "clips": [],
+    "skin_weights_valid": false,
+    "passed": true
+  },
+  {
+    "asset": "samambaia.glb",
+    "triangles": 5184,
+    "clips": [],
+    "skin_weights_valid": false,
+    "passed": true
+  },
+  {
+    "asset": "altar.glb",
+    "triangles": 276,
+    "clips": [],
+    "skin_weights_valid": false,
+    "passed": true
+  },
+  {
+    "asset": "ponte.glb",
+    "triangles": 368,
+    "clips": [],
+    "skin_weights_valid": false,
+    "passed": true
+  },
+  {
+    "asset": "cabana.glb",
+    "triangles": 180,
+    "clips": [],
+    "skin_weights_valid": false,
+    "passed": true
+  },
+  {
+    "asset": "orbe.glb",
+    "triangles": 216,
+    "clips": [],
+    "skin_weights_valid": false,
+    "passed": true
+  }
+]

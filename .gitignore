@@ -1,0 +1,8 @@
+.godot/
+build/
+*.blend1
+__pycache__/
+*.keystore
+*.jks
+export_credentials.cfg
+.agents/
