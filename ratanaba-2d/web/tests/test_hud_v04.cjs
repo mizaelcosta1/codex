@@ -28,18 +28,24 @@ const {chromium}=require('playwright'),fs=require('fs'),path=require('path');
  // Browser hit testing catches misplaced controls and guard/action overlaps.
  for(const viewport of [{width:1280,height:720},{width:844,height:390},{width:390,height:844}]){
   await page.setViewportSize(viewport);
-  check(await page.evaluate(()=>{
+  const geometry=await page.evaluate(()=>{
    const selectors=['.orb-heal','.pad-left','.pad-right','.pad-up','.pad-down','#clubButton','.action-jump','.action-dodge','.action-magic','.action-guard'];
    const buttons=selectors.map(s=>document.querySelector(s));
    const stage=document.querySelector('#stage').getBoundingClientRect();
-   return buttons.every(b=>{
+   const targets=buttons.map((b,i)=>{
     const r=b.getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);
-    return r.width>0&&r.height>0&&r.left>=stage.left-.5&&r.right<=stage.right+.5&&r.top>=stage.top-.5&&r.bottom<=stage.bottom+.5&&hit?.closest('button')===b;
-   })&&buttons.slice(5).every((b,i)=>buttons.slice(5+i+1).every(other=>{
+    return {selector:selectors[i],rect:{x:r.x,y:r.y,width:r.width,height:r.height},hit:hit?.closest('button')?.className||hit?.tagName,
+     reachable:r.width>0&&r.height>0&&r.left>=stage.left-.5&&r.right<=stage.right+.5&&r.top>=stage.top-.5&&r.bottom<=stage.bottom+.5&&hit?.closest('button')===b};
+   });
+   const overlaps=[];buttons.slice(5).forEach((b,i)=>buttons.slice(5+i+1).forEach(other=>{
     const a=b.getBoundingClientRect(),c=other.getBoundingClientRect();
-    return a.right<=c.left||c.right<=a.left||a.bottom<=c.top||c.bottom<=a.top;
+    if(!(a.right<=c.left||c.right<=a.left||a.bottom<=c.top||c.bottom<=a.top))overlaps.push([b.className,other.className]);
    }));
-  }),'Touch targets stay reachable without overlapping at '+viewport.width+'x'+viewport.height);
+   return {targets,overlaps};
+  });
+  const reachable=geometry.targets.every(t=>t.reachable)&&!geometry.overlaps.length;
+  if(!reachable)console.log('Touch geometry '+JSON.stringify({viewport,...geometry}));
+  check(reachable,'Touch targets stay reachable without overlapping at '+viewport.width+'x'+viewport.height);
  }
  await page.setViewportSize({width:1280,height:720});
  await page.evaluate(()=>{Ratanaba.state.hp=60;Ratanaba.state.p.stamina=45;Ratanaba.state.essence=17;RatanabaHUD.sync();});await step(.001);

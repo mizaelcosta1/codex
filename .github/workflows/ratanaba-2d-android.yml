@@ -48,9 +48,9 @@ jobs:
       - name: Browser combat, HUD and RPG regression tests
         working-directory: ratanaba-2d
         run: |
+          node web/tests/test_hud_v04.cjs
           node web/tests/test_game.cjs
           node web/tests/test_v03.cjs
-          node web/tests/test_hud_v04.cjs
           node web/tests/test_rpg_v05.cjs
       - name: Ensure Android SDK components
         shell: bash
