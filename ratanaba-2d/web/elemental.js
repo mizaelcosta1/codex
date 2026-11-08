@@ -1,5 +1,5 @@
 'use strict';
-(function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;root.RatanabaElemental=api;})(typeof globalThis!=='undefined'?globalThis:this,function(){
+(function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;root.RatanabaElemental=api;if(root.window&&root.window!==root)root.window.RatanabaElemental=api;})(typeof globalThis!=='undefined'?globalThis:this,function(){
  const TYPES=Object.freeze({FIRE:'fire',WATER:'water',LIGHTNING:'lightning',EARTH:'earth',NATURE:'nature',ICE:'ice',DARK:'dark',LIGHT:'light',POISON:'poison'});
  const WEAK={fire:'water',water:'lightning',earth:'nature',nature:'fire',ice:'fire',dark:'light',light:'dark',lightning:'earth',poison:'light'};
  const MONSTERS=Object.freeze({curupira:'fire',boitata:'fire',mula_sem_cabeca:'fire',iara:'water',yara:'water',guardiao_pedra:'earth',espirito_floresta:'nature',espectro_sombrio:'dark'});
