@@ -1,0 +1,9 @@
+build/
+.android/
+.private*/
+*.jks
+*.keystore
+local.properties
+web/tests/evidence/
+node_modules/
+__pycache__/

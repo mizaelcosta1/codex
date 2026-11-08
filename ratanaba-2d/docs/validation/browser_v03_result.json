@@ -1,0 +1,86 @@
+{
+  "checks": [
+    {
+      "label": "Continue disabled without a valid save",
+      "passed": true
+    },
+    {
+      "label": "Settings button opens actual controls",
+      "passed": true
+    },
+    {
+      "label": "Volume, blood and reduced-motion preferences apply",
+      "passed": true
+    },
+    {
+      "label": "Escape closes settings",
+      "passed": true
+    },
+    {
+      "label": "Extras gallery works",
+      "passed": true
+    },
+    {
+      "label": "Exit shows farewell screen",
+      "passed": true
+    },
+    {
+      "label": "New Game starts simulation",
+      "passed": true
+    },
+    {
+      "label": "Saved progress enables Continue",
+      "passed": true
+    },
+    {
+      "label": "Continue restores playable state",
+      "passed": true
+    },
+    {
+      "label": "Heavy contact produces hit-stop and physical knockback",
+      "passed": true
+    },
+    {
+      "label": "Contact emits directional blood particles",
+      "passed": true
+    },
+    {
+      "label": "Enemy integrates knockback velocity through time",
+      "passed": true
+    },
+    {
+      "label": "Blood droplets land as floor decals",
+      "passed": true
+    },
+    {
+      "label": "Blood disabled suppresses blood emission",
+      "passed": true
+    },
+    {
+      "label": "U casts physical elemental projectile and spends mana",
+      "passed": true
+    },
+    {
+      "label": "Water projectile collides with monster and applies wet status",
+      "passed": true
+    },
+    {
+      "label": "Water followed by lightning triggers amplified discharge",
+      "passed": true
+    },
+    {
+      "label": "Player damage reaction preserves knockback instead of input overwriting it",
+      "passed": true
+    },
+    {
+      "label": "Mobile menu remains inside viewport",
+      "passed": true
+    },
+    {
+      "label": "No browser JavaScript exceptions",
+      "passed": true
+    }
+  ],
+  "passed": 20,
+  "errors": []
+}

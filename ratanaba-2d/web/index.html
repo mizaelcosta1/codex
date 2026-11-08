@@ -1,0 +1,51 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><title>Ratanabá — Crônicas do Exílio</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="hud.css"><link rel="stylesheet" href="rpg.css"></head><body>
+<main id="stage"><canvas id="game" width="1280" height="720" aria-label="Jogo Ratanabá"></canvas>
+<header id="hud" aria-label="Estado do Banido">
+ <section class="vitals-ref" aria-label="Vida, vigor e recursos">
+  <img class="vitals-frame" src="../assets/hud_v04/vitals.webp" alt="">
+  <div class="health-orb" aria-hidden="true"><div id="orbFill"></div><span class="orb-gloss"></span></div>
+  <div class="ref-bar life"><i id="life"></i></div><div class="ref-bar stamina"><i id="stamina"></i></div>
+  <div class="vitals-name">O BANIDO <span id="level">NÍVEL 1</span></div>
+  <small id="numbers"></small><button class="orb-heal hud-hit" data-tap="heal" aria-label="Consumir cura (H)" title="Consumir cura · H"><span id="potionCount">3</span></button>
+  <div class="orb-essence" title="Essência recolhida">✧ <b id="essence">0</b></div>
+ </section>
+ <div id="area"><small>CRÔNICAS DO EXÍLIO</small><strong id="areaName"></strong></div>
+ <button id="pause" class="hud-pause" aria-label="Pausar (Esc)">Ⅱ</button>
+</header>
+<button id="minimap" class="hud-hit" aria-label="Mapa de Ratanabá, abrir ou fechar mapa (Tab)"><img src="../assets/hud_v04/minimap.webp" alt=""><canvas id="miniCanvas" width="280" height="280" aria-hidden="true"></canvas><small>RASTROS</small></button>
+<nav id="elements" aria-label="Imbuir arma com elemento">
+ <button data-element="0" aria-label="Imbuir fogo, tecla 1" class="selected"><img alt="" src="../assets/hud_v04/fire.webp"><small>1</small></button>
+ <button data-element="1" aria-label="Imbuir eletricidade, tecla 2"><img alt="" src="../assets/hud_v04/lightning.webp"><small>2</small></button>
+ <button data-element="2" aria-label="Imbuir água, tecla 3"><img alt="" src="../assets/hud_v04/water.webp"><small>3</small></button>
+ <button data-element="3" aria-label="Imbuir veneno, tecla 4"><img alt="" src="../assets/hud_v04/poison.webp"><small>4</small></button>
+ <span id="elementName">FOGO</span>
+</nav>
+<div id="bossHud"><span>CURUPIRA</span><small>O ARREPENDIMENTO TEMPORAL</small><div class="bar boss"><i id="bossLife"></i></div></div>
+<div id="toast"></div><footer><span id="objective"></span><span id="combo"></span></footer>
+<nav id="touch" aria-label="Controles do jogo">
+ <div class="direction-pad"><img src="../assets/hud_v04/dpad.webp" alt="">
+ <button class="hud-hit pad-left" data-hold="left" aria-label="Mover para esquerda"></button><button class="hud-hit pad-right" data-hold="right" aria-label="Mover para direita"></button><button class="hud-hit pad-up" data-tap="jump" aria-label="Pular"></button><button class="hud-hit pad-down" data-tap="interact" aria-label="Interagir no altar"></button></div>
+ <div class="action-pad">
+ <button id="clubButton" class="hud-hit action-club" aria-label="Golpe; segure para ataque pesado" title="Toque: golpe · segure: pesado · J/L"><img src="../assets/hud_v04/attack.webp" alt=""><small>GOLPE</small></button>
+ <button class="hud-hit action-jump" data-tap="jump" aria-label="Pular (Espaço)"><img src="../assets/hud_v04/jump.webp" alt=""><small>PULO</small></button>
+ <button class="hud-hit action-guard" data-hold="guard" aria-label="Defender e aparar (F)"><span aria-hidden="true">🛡</span><small>DEFESA</small></button><button class="hud-hit action-dodge" data-tap="dodge" aria-label="Esquivar (K)"><img src="../assets/hud_v04/dodge.webp" alt=""><small>ESQUIVA</small></button>
+ <button class="hud-hit action-magic" data-tap="magic" aria-label="Lançar magia (U)"><img src="../assets/hud_v04/magic.webp" alt=""><small>MAGIA</small><span id="spellCooldown"></span></button>
+ </div>
+</nav>
+<div id="cinemaBars" aria-hidden="true" hidden></div>
+<section id="cutscene" role="dialog" aria-modal="true" aria-labelledby="speakerName" aria-describedby="dialogueText" hidden>
+ <div class="speech-frame"><img id="speakerPortrait" src="../assets/hud_v04/portrait_banido.webp" alt="Retrato de O Banido"><div class="speech-copy"><h2 id="speakerName">O BANIDO</h2><p id="dialogueText" aria-live="polite"></p><div class="speech-controls"><span id="dialogueCount"></span><button id="dialogueNext">CONTINUAR <span>↵</span></button><button id="dialogueSkip">PULAR CENA</button></div></div></div>
+</section>
+<div id="menu" class="menu-scene">
+<img class="menu-art" src="../assets/ui_v03/throne_menu.webp" alt="O Banido aguarda no trono entre ruínas e chamas turquesa">
+<div class="menu-shade"></div><div class="menu-title"><h1>RATANABÁ</h1><h2>GUARDIANS</h2><span>❖ O BANIDO ❖</span></div><div class="menu-motes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<div class="menu-caption"><span>CRÔNICAS DO EXÍLIO</span><p>O mundo esqueceu teu nome.<br>A floresta ainda sangra por ti.</p></div>
+<article class="menu-panel"><small class="eyebrow">O PROTOCOLO DO ESQUECIMENTO</small><div class="menu-ornament" aria-hidden="true">❖</div>
+<nav class="main-actions" aria-label="Menu principal"><button class="primary" id="start">NOVO JOGO</button><button id="continue" disabled>CONTINUAR</button><button id="settingsOpen">CONFIGURAÇÕES</button><button id="extrasOpen">EXTRAS</button><button id="exitOpen">SAIR</button></nav>
+<small id="saveStatus" class="save-status">A primeira vigília ainda aguarda.</small><small class="version">VERSÃO JOGÁVEL 0.6<br>3 ÁREAS · 1 GUARDIÃO</small></article>
+</div>
+<div class="menu-dialog" id="settingsDialog" role="dialog" aria-modal="true" aria-labelledby="settingsTitle" hidden><article><small class="eyebrow">A MEMÓRIA TE OBEDECE</small><h2 id="settingsTitle">CONFIGURAÇÕES</h2><div class="setting-row"><label for="volume">Volume geral</label><input id="volume" type="range" min="0" max="100" value="70"><output id="volumeValue">70%</output></div><div class="options"><label><input type="checkbox" id="sound" checked> Áudio e ambiente</label><label><input type="checkbox" id="gore" checked> Sangue nos impactos</label><label><input type="checkbox" id="touchToggle"> Controles de toque</label><label><input type="checkbox" id="reducedMotion"> Reduzir tremor e clarões</label></div><button id="fullscreen">TELA CHEIA</button><p id="fullscreenStatus" class="dialog-note" aria-live="polite"></p><button class="primary" data-close-dialog>VOLTAR</button></article></div>
+<div class="menu-dialog" id="extrasDialog" role="dialog" aria-modal="true" aria-labelledby="extrasTitle" hidden><article class="extras-panel"><small class="eyebrow">FRAGMENTOS DA MEMÓRIA PRIMORDIAL</small><h2 id="extrasTitle">CRÔNICAS DO EXÍLIO</h2><div class="extras-tabs" role="tablist" aria-label="Extras"><button data-tab="chronicle" role="tab" aria-selected="true">HISTÓRIA</button><button data-tab="controls" role="tab" aria-selected="false">COMBATE</button><button data-tab="gallery" role="tab" aria-selected="false">GALERIA</button></div><section data-extra="chronicle"><p>Para impedir que a entropia devorasse Ratanabá, uma divindade absorveu a corrupção da terra. Seu nome foi apagado da Memória Primordial. Restou o Banido.</p><p>Os antigos Guardiões perderam seu nexo e a própria razão. O Curupira repete os caminhos do passado, acreditando que destruir o amigo poderá reiniciar o tempo.</p><blockquote>“Meus rastros… mentiram para o chão.<br>Leve meu rastro. Não olhe.”</blockquote></section><section data-extra="controls" hidden><div class="key-grid"><span>MOVER</span><b>A / D ou ← →</b><span>PULAR</span><b>ESPAÇO / W</b><span>COMBO DE 3 GOLPES</span><b>J · J · J</b><span>GOLPE PESADO</span><b>L</b><span>DEFESA / PARRY</span><b>F · janela de 150 ms</b><span>ESQUIVA / RUPTURA</span><b>K e depois J</b><span>ATAQUE AÉREO</span><b>ESPAÇO + J</b><span>MAGIA ELEMENTAL</span><b>U · usa mana</b><span>MOCHILA / EVOLUIR AURA</span><b>B / N</b><span>ELEMENTOS</span><b>1–4 / Q</b><span>ALTAR / CURAR</span><b>E / H</b><span>MAPA / PAUSA</span><b>TAB / ESC</b></div><p class="dialog-note">Água prepara a descarga elétrica. O veneno corrói com o tempo. Observa a antecipação dos ataques e golpeia durante a recuperação.</p></section><section data-extra="gallery" hidden><div class="art-gallery"><figure><img src="../assets/pack/hero.webp" alt="Atlas de poses e ataques do Banido"><figcaption>O Banido · clava ritual</figcaption></figure><figure><img src="../assets/pack/monsters.webp" alt="Atlas dos monstros e do Curupira"><figcaption>Corrompidos e Guardião</figcaption></figure><figure><img src="../assets/ui_v03/elemental_slashes.webp" alt="Atlas de magia elemental"><figcaption>Quatro imbuíções elementais</figcaption></figure></div></section><button class="primary" data-close-dialog>VOLTAR</button></article></div>
+<div class="menu-dialog" id="exitDialog" role="dialog" aria-modal="true" aria-labelledby="exitTitle" hidden><article><small class="eyebrow">ATÉ A PRÓXIMA VIGÍLIA</small><h2 id="exitTitle">O SILÊNCIO CHEGOU</h2><p>O jogo está encerrado nesta tela.<br>Podes fechar esta aba ou retornar à memória.</p><button class="primary" data-close-dialog>RETORNAR AO MENU</button></article></div>
+<div id="pauseMenu" hidden><article><small class="eyebrow">O TEMPO SUSPENDE A FERIDA</small><h2>VIGÍLIA</h2><button class="primary" id="resume">RETORNAR</button><button id="restart">RECOMEÇAR NO ALTAR</button><button id="pauseSettings">CONFIGURAÇÕES</button><button id="returnToMenu">MENU PRINCIPAL</button><p>A luz exige que carregues o que sobrou.</p></article></div>
+</main><script src="elemental.js"></script><script src="game.js"></script><script src="menu.js"></script><script src="hud.js"></script><script src="animations.js"></script><script src="rpg.js"></script><script src="native-bridge.js"></script></body></html>

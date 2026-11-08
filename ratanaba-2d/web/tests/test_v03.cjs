@@ -1,0 +1,38 @@
+const {chromium}=require('playwright'),fs=require('fs'),path=require('path');
+(async()=>{
+ const browser=await chromium.launch({executablePath:process.env.CHROMIUM_EXECUTABLE,headless:true,args:['--no-sandbox','--disable-dev-shm-usage','--allow-file-access-from-files','--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+ const page=await browser.newPage({viewport:{width:1280,height:720}}),errors=[],checks=[];page.on('pageerror',e=>errors.push(String(e)));
+ const check=(v,label)=>{checks.push({label,passed:!!v});console.log((v?'PASS ':'FAIL ')+label);if(!v)throw Error(label)};
+ await page.addInitScript(()=>{window.__ratanaba_test_manual=true;});
+ const step=async seconds=>page.evaluate(seconds=>{for(let t=0;t<seconds;t+=1/60)Ratanaba.update(1/60);Ratanaba.render()},seconds);
+ const reset=async()=>{await page.evaluate(()=>{Ratanaba.start(false);Ratanaba.state.sound=false;Ratanaba.warp(560);Ratanaba.state.p.inv=100;Ratanaba.state.p.facing=1;});if(await page.locator('#dialogueSkip').isVisible())await page.click('#dialogueSkip');};
+ await page.goto('file://'+path.join(__dirname,'..','index.html'));await page.waitForFunction(()=>window.Ratanaba?.ready);await page.waitForFunction(()=>document.querySelector('.menu-art').complete);
+ check(await page.locator('#continue').isDisabled(),'Continue disabled without a valid save');
+ await page.click('#settingsOpen');check(await page.locator('#settingsDialog').isVisible(),'Settings button opens actual controls');
+ await page.locator('#volume').fill('35');await page.locator('#volume').dispatchEvent('input');await page.locator('#reducedMotion').check();await page.locator('#gore').uncheck();
+ check(await page.evaluate(()=>RatanabaMenu.preferences.volume===.35&&!Ratanaba.state.gore&&RatanabaMenu.preferences.reducedMotion),'Volume, blood and reduced-motion preferences apply');
+ await page.keyboard.press('Escape');check(await page.locator('#settingsDialog').isHidden(),'Escape closes settings');
+ await page.click('#extrasOpen');await page.click('[data-tab="gallery"]');check(await page.locator('[data-extra="gallery"]').isVisible(),'Extras gallery works');await page.keyboard.press('Escape');
+ await page.click('#exitOpen');check(await page.locator('#exitDialog').isVisible(),'Exit shows farewell screen');await page.keyboard.press('Escape');
+ await page.click('#start');await page.click('#dialogueSkip');check(await page.evaluate(()=>Ratanaba.state.running&&!Ratanaba.state.paused),'New Game starts simulation');
+ await page.evaluate(()=>Ratanaba.persist());await page.click('#pause');await page.click('#returnToMenu');check(await page.locator('#continue').isEnabled(),'Saved progress enables Continue');
+ await page.click('#continue');check(await page.evaluate(()=>Ratanaba.state.running),'Continue restores playable state');
+ await reset();await page.evaluate(()=>{Ratanaba.state.gore=true;Ratanaba.state.element=0;});await page.keyboard.press('KeyL');await step(.40);
+ check(await page.evaluate(()=>Ratanaba.state.enemies[0].flinch>0&&Ratanaba.state.enemies[0].vx>350&&Ratanaba.state.hitstop>0),'Heavy contact produces hit-stop and physical knockback');
+ check(await page.evaluate(()=>Ratanaba.state.particles.some(p=>p.blood)),'Contact emits directional blood particles');
+ const x=await page.evaluate(()=>Ratanaba.state.enemies[0].x);await step(.24);check(await page.evaluate(x=>Ratanaba.state.enemies[0].x>x+20,x),'Enemy integrates knockback velocity through time');
+ await step(.5);check(await page.evaluate(()=>Ratanaba.state.decals.length>0),'Blood droplets land as floor decals');
+ await reset();await page.evaluate(()=>{Ratanaba.state.gore=false;});await page.keyboard.press('KeyJ');await step(.18);check(await page.evaluate(()=>!Ratanaba.state.particles.some(p=>p.blood)),'Blood disabled suppresses blood emission');
+ await reset();await page.evaluate(()=>{Ratanaba.warp(520);Ratanaba.state.element=2;});await page.keyboard.press('KeyU');await step(.01);check(await page.evaluate(()=>Ratanaba.state.projectiles.length===1&&Ratanaba.state.rpg.mana<80),'U casts physical elemental projectile and spends mana');await step(.20);
+ check(await page.evaluate(()=>Ratanaba.state.enemies[0].wet>0&&Ratanaba.state.enemies[0].hp<65),'Water projectile collides with monster and applies wet status');
+ await page.evaluate(()=>{const s=Ratanaba.state;s.p.spellCd=0;s.p.stamina=100;s.element=1;});await page.keyboard.press('KeyU');await step(.24);check(await page.evaluate(()=>Ratanaba.state.enemies[0].wet===0&&Ratanaba.state.enemies[0].hp<15),'Water followed by lightning triggers amplified discharge');
+ await reset();await page.evaluate(()=>{Ratanaba.state.p.inv=0;Ratanaba.damage(10,-1);});await step(.10);check(await page.evaluate(()=>Ratanaba.state.p.vx< -200&&Ratanaba.state.p.hurt>0),'Player damage reaction preserves knockback instead of input overwriting it');
+ // Original main menu, actual in-engine hit, actual spell, settings and mobile captures.
+ const out=path.join(__dirname,'evidence');fs.mkdirSync(out,{recursive:true});
+ await page.evaluate(()=>{Ratanaba.state.running=false;document.querySelector('#menu').hidden=false;});await page.screenshot({path:path.join(out,'v03_menu.png')});
+ await reset();await page.evaluate(()=>{Ratanaba.state.gore=true;Ratanaba.setReducedMotion(true);Ratanaba.state.element=0;});await page.keyboard.press('KeyL');await step(.60);await page.evaluate(()=>{Ratanaba.state.p.inv=0;Ratanaba.state.toastUntil=0;Ratanaba.render();});await page.screenshot({path:path.join(out,'v03_impact.png')});
+ await reset();await page.evaluate(()=>{Ratanaba.warp(2670);Ratanaba.state.element=1;Ratanaba.state.p.facing=1;});await page.keyboard.press('KeyU');await step(.05);await page.evaluate(()=>{Ratanaba.state.p.inv=0;Ratanaba.state.toastUntil=0;Ratanaba.render();});await page.screenshot({path:path.join(out,'v03_magic.png')});
+ await page.click('#pause');await page.click('#pauseSettings');await page.screenshot({path:path.join(out,'v03_settings.png')});await page.keyboard.press('Escape');await page.click('#returnToMenu');
+ await page.setViewportSize({width:844,height:390});await page.screenshot({path:path.join(out,'v03_mobile.png')});check(await page.evaluate(()=>document.querySelector('#start').getBoundingClientRect().right<=innerWidth),'Mobile menu remains inside viewport');
+ check(!errors.length,'No browser JavaScript exceptions');fs.writeFileSync(path.join(out,'v03_result.json'),JSON.stringify({checks,passed:checks.length,errors},null,2));await browser.close();
+})().catch(e=>{console.error(e);process.exit(1)});

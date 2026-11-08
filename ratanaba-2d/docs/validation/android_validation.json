@@ -1,0 +1,23 @@
+{
+  "package": "br.com.ratanaba.guardians2d",
+  "version_name": "0.5.1",
+  "version_code": 501,
+  "min_sdk": 26,
+  "target_sdk": 35,
+  "apk_bytes": 8988934,
+  "sha256": "427195b0fd765534ca1bf176e6d0794443f26c63c5702433a9d7a5d6b0c80918",
+  "asset_count": 66,
+  "checks": {
+    "dex_magic": true,
+    "zip_integrity": true,
+    "signature_verified": true,
+    "zip_alignment": true,
+    "runtime_asset_hashes": true,
+    "manifest_package_version_sdk": true,
+    "no_internet_permission": true,
+    "literal_html_css_dependencies": true
+  },
+  "signing": "Development debug certificate, not Play Store production signing",
+  "device_test": "Not run: no connected Android device/emulator available",
+  "native_bridge_injected": true
+}

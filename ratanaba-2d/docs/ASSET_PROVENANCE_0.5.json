@@ -1,0 +1,15 @@
+{
+  "generation": "Built-in image_gen; six distinct calls; exact prompts saved in ASSET_PROMPTS_0.5.json",
+  "creature_reference": "Existing assets/pack/monsters.webp; Curupira identity and three species retained",
+  "assets": {
+    "curupira": "48 poses, six columns/eight action rows",
+    "penitent": "24 poses, six columns/four action rows",
+    "root_hound": "24 poses, six columns/four action rows",
+    "sentinel": "24 poses, six columns/four action rows",
+    "items": "16 individual inventory icons",
+    "ui_icons": "8 backpack/aura/stat icons"
+  },
+  "normalization": "Source sheet row separators detected from transparent gaps; 320px square frames use one consistent scale per species and a shared ground pivot [160,305]. No generated in-between frame is asserted. Icons mechanically centered to equal cells. Raw sources and individual PNGs retained.",
+  "runtime": "Curupira plus the three current common monsters use these sheets. Other named lore guardians are not added as playable bosses in this update.",
+  "limitations": "Generated six-pose sequences still need production hand cleanup for perfect anatomical and silhouette continuity; no motion-capture claim."
+}

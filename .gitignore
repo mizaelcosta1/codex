@@ -6,3 +6,8 @@ __pycache__/
 *.jks
 export_credentials.cfg
 .agents/
+
+# Android 2D: signing credentials never belong in Git
+.privateandroid/
+*.jks
+*.keystore

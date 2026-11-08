@@ -1,0 +1,110 @@
+{
+  "checks": [
+    {
+      "label": "New Game opens the supplied dialogue panel",
+      "passed": true
+    },
+    {
+      "label": "Opening cut-scene is a real narrative state",
+      "passed": true
+    },
+    {
+      "label": "Cut-scene suspends movement, combat and world time",
+      "passed": true
+    },
+    {
+      "label": "Dialogue progressively reveals the complete current line",
+      "passed": true
+    },
+    {
+      "label": "Enter advances to the next line",
+      "passed": true
+    },
+    {
+      "label": "Escape pauses during a cut-scene",
+      "passed": true
+    },
+    {
+      "label": "Skip closes dialogue and clears cinematic state",
+      "passed": true
+    },
+    {
+      "label": "Cut-scene clears buffered movement and attacks",
+      "passed": true
+    },
+    {
+      "label": "Gothic vitals frame is the actual extracted artwork",
+      "passed": true
+    },
+    {
+      "label": "Reference directional pad and action buttons visible",
+      "passed": true
+    },
+    {
+      "label": "Four framed elemental assets are in the functional HUD",
+      "passed": true
+    },
+    {
+      "label": "Health orb, life and vigor bars track actual resources",
+      "passed": true
+    },
+    {
+      "label": "Small orb displays actual essence",
+      "passed": true
+    },
+    {
+      "label": "Potion orb heals and consumes a real charge",
+      "passed": true
+    },
+    {
+      "label": "Element buttons select the actual weapon imbue",
+      "passed": true
+    },
+    {
+      "label": "Directional pad moves the physical player",
+      "passed": true
+    },
+    {
+      "label": "Club tap triggers light attack",
+      "passed": true
+    },
+    {
+      "label": "Holding the club triggers heavy attack",
+      "passed": true
+    },
+    {
+      "label": "Round magic button casts an elemental projectile",
+      "passed": true
+    },
+    {
+      "label": "Minimap opens the world map",
+      "passed": true
+    },
+    {
+      "label": "Minimap renders a live discovered-area map",
+      "passed": true
+    },
+    {
+      "label": "HUD fits the landscape phone viewport",
+      "passed": true
+    },
+    {
+      "label": "Entering Curupira arena triggers a real boss dialogue",
+      "passed": true
+    },
+    {
+      "label": "Boss battle resumes after dialogue",
+      "passed": true
+    },
+    {
+      "label": "Boss defeat opens farewell dialogue and grants progression",
+      "passed": true
+    },
+    {
+      "label": "No browser JavaScript exceptions",
+      "passed": true
+    }
+  ],
+  "passed": 26,
+  "errors": []
+}
