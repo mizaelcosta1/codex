@@ -25,6 +25,31 @@ const {chromium}=require('playwright'),fs=require('fs'),path=require('path');
  check(await page.locator('.vitals-frame').evaluate(i=>i.complete&&i.naturalWidth===730),'Gothic vitals frame is the actual extracted artwork');
  check(await page.locator('#touch').isVisible(),'Reference directional pad and action buttons visible');
  check(await page.locator('#elements button img').count()===4,'Four framed elemental assets are in the functional HUD');
+ // Browser hit testing catches misplaced controls and guard/action overlaps.
+ for(const viewport of [{width:1280,height:720},{width:844,height:390},{width:390,height:844}]){
+  await page.setViewportSize(viewport);
+  // Trial clicks wait for the browser's painted hit-test tree after resize.
+  for(const selector of ['.orb-heal','.pad-left','.pad-right','.pad-up','.pad-down','#clubButton','.action-jump','.action-dodge','.action-magic','.action-guard'])await page.locator(selector).click({trial:true});
+  const geometry=await page.evaluate(()=>{
+   const selectors=['.orb-heal','.pad-left','.pad-right','.pad-up','.pad-down','#clubButton','.action-jump','.action-dodge','.action-magic','.action-guard'];
+   const buttons=selectors.map(s=>document.querySelector(s));
+   const stage=document.querySelector('#stage').getBoundingClientRect();
+   const targets=buttons.map((b,i)=>{
+    const r=b.getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);
+    return {selector:selectors[i],rect:{x:r.x,y:r.y,width:r.width,height:r.height},hit:hit?.closest('button')?.className||hit?.tagName,
+     reachable:r.width>0&&r.height>0&&r.left>=stage.left-.5&&r.right<=stage.right+.5&&r.top>=stage.top-.5&&r.bottom<=stage.bottom+.5&&hit?.closest('button')===b};
+   });
+   const overlaps=[];buttons.slice(5).forEach((b,i)=>buttons.slice(5+i+1).forEach(other=>{
+    const a=b.getBoundingClientRect(),c=other.getBoundingClientRect();
+    if(!(a.right<=c.left||c.right<=a.left||a.bottom<=c.top||c.bottom<=a.top))overlaps.push([b.className,other.className]);
+   }));
+   return {targets,overlaps};
+  });
+  const reachable=geometry.targets.every(t=>t.reachable)&&!geometry.overlaps.length;
+  if(!reachable)console.log('Touch geometry '+JSON.stringify({viewport,...geometry}));
+  check(reachable,'Touch targets stay reachable without overlapping at '+viewport.width+'x'+viewport.height);
+ }
+ await page.setViewportSize({width:1280,height:720});
  await page.evaluate(()=>{Ratanaba.state.hp=60;Ratanaba.state.p.stamina=45;Ratanaba.state.essence=17;RatanabaHUD.sync();});await step(.001);
  check(await page.evaluate(()=>document.querySelector('#life').style.width==='50%'&&document.querySelector('#stamina').style.width.startsWith('45')&&document.querySelector('#orbFill').style.height==='50%'),'Health orb, life and vigor bars track actual resources');
  check(await page.locator('#essence').textContent()==='17','Small orb displays actual essence');
