@@ -1,0 +1,18 @@
+'use strict';
+const assert=require('node:assert/strict');
+const E=require('../elemental.js');
+for(const [monster,element] of Object.entries(E.MONSTERS))assert.equal(E.multiplier(E.WEAK[element],element),1.75,monster);
+assert.equal(E.damage(40,'water','fire'),70);
+assert.equal(E.damage(40,'fire','fire'),20);
+assert.equal(E.damage(40,'lightning','water',true),88);
+const enemy={kind:'curupira',hp:100};
+assert.equal(E.applyHit(enemy,{base:40,element:'water'}).amount,70);
+assert.equal(enemy.hp,30);
+assert.equal(enemy.wet,5);
+const boss={stun:0},player={guarding:true,guardStarted:10};
+assert.deepEqual(E.defend(player,{damage:50,attacker:boss},10.1),{blocked:true,parry:true,damage:0});
+assert.equal(boss.stun,1.5);
+assert.equal(E.defend(player,{damage:50,attacker:boss},10.3).damage,18);
+E.tickStatus(boss,1.5);
+assert.equal(boss.stun,0);
+console.log('PASS: elemental weakness, resistance, wet combo, parry, block, stun');
