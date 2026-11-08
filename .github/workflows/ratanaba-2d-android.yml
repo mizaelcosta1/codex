@@ -3,7 +3,7 @@ name: Ratanaba 2D RPG Android APK
 on:
   workflow_dispatch:
   push:
-    branches: [feature/ratanaba-2d-rpg-android]
+    branches: [main, feature/ratanaba-2d-rpg-android]
     paths:
       - 'ratanaba-2d/**'
       - '.github/workflows/ratanaba-2d-android.yml'
