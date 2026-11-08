@@ -66,7 +66,7 @@ jobs:
       - name: Upload installable development APK and validation
         uses: actions/upload-artifact@v4
         with:
-          name: ratanaba-guardians-2d-v0.6.0-android-debug
+          name: ratanaba-guardians-2d-v0.6.1-android-debug
           if-no-files-found: error
           retention-days: 30
           path: |

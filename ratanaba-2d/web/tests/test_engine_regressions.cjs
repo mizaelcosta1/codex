@@ -8,6 +8,14 @@ async function fixture(){
  await new Promise(resolve=>setImmediate(resolve));const g=context.window.Ratanaba;g.start();return {g,local,calls};
 }
 const tests={
+ 'lethal boss charge ends the old encounter before recovery':async({g})=>{
+  g.warp(5480);g.state.seals.fill(true);Object.assign(g.state.boss,{state:'charge',timer:.001,dir:1,cycle:5});g.state.hp=1;
+  g.update(1/60);assert.equal(g.state.p.x,g.state.checkpoint.x);assert.equal(g.state.boss.state,'dormant');assert.equal(g.state.boss.cycle,0);
+ },
+ 'lethal enemy attack cannot reward another enemy from the old life':async({g})=>{
+  g.warp(650);g.state.hp=1;Object.assign(g.state.enemies[0],{state:'windup',timer:0});Object.assign(g.state.enemies[1],{hp:.01,poison:1});
+  g.update(1/60);assert.equal(g.state.p.x,g.state.checkpoint.x);assert.equal(g.state.drops.length,0);assert(g.state.enemies.every(e=>e.hp===e.max));
+ },
  'each elemental seal survives an immediate save reload':async({g})=>{
   g.warp(2200);g.state.element=0;g.hitAttack({kind:'light',stage:1});assert.equal(g.state.seals[0],true);assert.equal(g.restore(),true);assert.equal(g.state.seals[0],true);
  },
