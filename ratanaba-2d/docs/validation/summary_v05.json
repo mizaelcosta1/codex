@@ -1,0 +1,11 @@
+{
+  "version": "0.5 web RPG",
+  "browser_checks_passed": 89,
+  "rpg_unit_checks_passed": 21,
+  "animation_unit_checks_passed": 18,
+  "live_smoke_passed": true,
+  "browser_js_errors": 0,
+  "assets": "120 normalized creature frames,16item icons,8backpack/aura/stat icons",
+  "capture": "Actual Chromium Canvas and HTML; deterministic QA positions/inventory seeding used for captures.",
+  "limits": "Generated pose sequences remain prototype art; no additional lore bosses or Android hardware/APK tested."
+}

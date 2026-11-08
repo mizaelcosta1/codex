@@ -1,3 +1,13 @@
+# Ratanabá Guardians — versão 2D RPG
+
+A nova versão 2D está em [ratanaba-2d/](ratanaba-2d/).
+
+**[Baixar APK 2D 0.5.1 para Android](downloads/ratanaba-guardians-2d-v0.5.1-debug.apk)** · [Instalação e SHA256](downloads/README-ratanaba-2d.md) · [Código e testes](ratanaba-2d/README.md)
+
+Três áreas, Curupira, sprites com novas ações, combate elemental, mochila, raridades, mana e evolução por aura. O APK contém a versão web0.5 em um aplicativo Android offline. É uma build de teste; não houve teste em aparelho Android físico.
+
+---
+
 # Guardiões da Mata — v0.1.0
 
 Primeira versão jogável de uma aventura 3D offline do folclore brasileiro,

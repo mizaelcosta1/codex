@@ -1,0 +1,100 @@
+{
+  "browser": "Playwright Chromium",
+  "realGameplay": true,
+  "checks": [
+    {
+      "label": "all four generated atlases loaded",
+      "passed": true
+    },
+    {
+      "label": "keyboard movement advances physical player",
+      "passed": true
+    },
+    {
+      "label": "held jump leaves ground",
+      "passed": true
+    },
+    {
+      "label": "player returns to platform collision",
+      "passed": true
+    },
+    {
+      "label": "J starts light combo stage I",
+      "passed": true
+    },
+    {
+      "label": "buffered second J chains stage II",
+      "passed": true
+    },
+    {
+      "label": "buffered third J chains stage III",
+      "passed": true
+    },
+    {
+      "label": "combo deals damage to nearby monster",
+      "passed": true
+    },
+    {
+      "label": "L starts committed heavy attack",
+      "passed": true
+    },
+    {
+      "label": "dodge plus J starts rushing attack",
+      "passed": true
+    },
+    {
+      "label": "jump plus J starts downward aerial attack",
+      "passed": true
+    },
+    {
+      "label": "four keyboard element attacks solve four seals",
+      "passed": true
+    },
+    {
+      "label": "altar converts loot into RPG level",
+      "passed": true
+    },
+    {
+      "label": "death leaves recoverable essence and restores checkpoint",
+      "passed": true
+    },
+    {
+      "label": "bloodstain restores lost currency once",
+      "passed": true
+    },
+    {
+      "label": "boss clearly telegraphs before charging",
+      "passed": true
+    },
+    {
+      "label": "boss telegraph transitions to charge",
+      "passed": true
+    },
+    {
+      "label": "boss second phase summons three ground hazards",
+      "passed": true
+    },
+    {
+      "label": "defeating boss grants air-dash traversal",
+      "passed": true
+    },
+    {
+      "label": "saved progression restores boss and ability",
+      "passed": true
+    },
+    {
+      "label": "no browser JavaScript errors",
+      "passed": true
+    }
+  ],
+  "passed": 21,
+  "errors": [],
+  "screenshots": [
+    "01_title.png",
+    "02_crypt.png",
+    "03_cloister.png",
+    "04_forest.png",
+    "05_curupira.png"
+  ],
+  "captureNote": "Actual Canvas game and DOM HUD rendered by Chromium. Reproducible QA warps/freeze used to frame the three playable areas; no composite screenshots."
+}

@@ -1,0 +1,94 @@
+{
+  "checks": [
+    {
+      "label": "All four new animation atlases loaded",
+      "passed": true
+    },
+    {
+      "label": "New character starts with real backpack resources and 80 mana",
+      "passed": true
+    },
+    {
+      "label": "B opens backpack and suspends combat",
+      "passed": true
+    },
+    {
+      "label": "Backpack has 24 actual slots",
+      "passed": true
+    },
+    {
+      "label": "Mana potion restores resource and consumes one inventory unit",
+      "passed": true
+    },
+    {
+      "label": "Inventory health potion heals actual HP",
+      "passed": true
+    },
+    {
+      "label": "Aura crystal binds 8 spendable aura",
+      "passed": true
+    },
+    {
+      "label": "Aura buys strength at the altar and increases real damage",
+      "passed": true
+    },
+    {
+      "label": "Closing RPG modal resumes simulation",
+      "passed": true
+    },
+    {
+      "label": "Attribute purchase is locked away from an altar",
+      "passed": true
+    },
+    {
+      "label": "Vitality, magic and luck investments update character capacities",
+      "passed": true
+    },
+    {
+      "label": "Aura panel exposes live normalized loot probabilities",
+      "passed": true
+    },
+    {
+      "label": "Actual magic cast spends 18 mana and creates a projectile",
+      "passed": true
+    },
+    {
+      "label": "Insufficient mana prevents a cast without negative resource",
+      "passed": true
+    },
+    {
+      "label": "Killing a mob adds aura once and creates a real randomized world item",
+      "passed": true
+    },
+    {
+      "label": "Walking over a dropped item transfers it into backpack",
+      "passed": true
+    },
+    {
+      "label": "Save restores attributes, owned equipment and actual bonuses",
+      "passed": true
+    },
+    {
+      "label": "Death save preserves bound inventory and recoverable essence while clearing loose loot",
+      "passed": true
+    },
+    {
+      "label": "Boss selects seven distinct living-action animation rows",
+      "passed": true
+    },
+    {
+      "label": "Boss death awards exactly one fixed relic alongside randomized loot",
+      "passed": true
+    },
+    {
+      "label": "Restoring a defeated boss does not replay its death animation",
+      "passed": true
+    },
+    {
+      "label": "No browser JavaScript exceptions",
+      "passed": true
+    }
+  ],
+  "passed": 22,
+  "errors": []
+}

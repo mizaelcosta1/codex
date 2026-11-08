@@ -1,0 +1,7 @@
+RATANABA GUARDIANS 0.5 - RPG E ANIMACOES
+Extraia a pasta inteira e abra web/index.html no Chrome ou Edge.
+B: mochila. N: evoluir aura (perto do altar). U: magia (gasta mana).
+J/J/J combo; L pesado; K esquiva; Espaco pulo; 1-4 elementos.
+Falas: Enter, Espaco ou E; Pular Cena retoma.
+120 poses novas, 16 itens, 8 icones mochila/aura/atributos.
+Versao para navegador. Codigo e assets usados incluidos.

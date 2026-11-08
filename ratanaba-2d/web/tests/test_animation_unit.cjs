@@ -1,0 +1,24 @@
+'use strict';
+const vm=require('vm'),fs=require('fs'),path=require('path'),assert=require('assert');
+const calls=[],context={window:{},console,Math,Number,Object,WeakMap,Promise,Image:class{constructor(){this.naturalWidth=1200;this.naturalHeight=1600;}set src(v){this._src=v;Promise.resolve().then(()=>this.onload());}}};
+vm.createContext(context);vm.runInContext(fs.readFileSync(path.join(__dirname,'../animations.js'),'utf8'),context);
+(async()=>{
+ const a=context.window.RatanabaAnimations;await a.ready;assert(a.loaded);let count=0;
+ const pass=(label,fn)=>{fn();count++;console.log('PASS '+label);};
+ const boss={x:5500,y:620,hp:480,max:480,state:'watch',timer:1,dir:-1};
+ pass('boss idle uses row 0 and loops',()=>{a.tick(boss,.1);const s=a.sample(boss,{boss:true});assert.equal(s.row,0);assert(s.loop);});
+ const phases=[['run',1,.6],['stalk',1,.6],['windup',2,1.05],['charge',3,.7],['roots',4,1.4],['echo',5,1.2],['recover',6,.9]];
+ for(const [state,row,duration] of phases)pass('boss '+state+' uses distinct row '+row,()=>{boss.state=state;boss.timer=duration;a.tick(boss,.02);const s=a.sample(boss,{boss:true});assert.equal(s.row,row);if(state!=='stalk')assert.equal(s.duration,duration);});
+ pass('attack frame progresses through authored sequence',()=>{boss.state='charge';boss.timer=.7;a.tick(boss,.01);for(let i=0;i<4;i++)a.tick(boss,.1);assert(a.sample(boss,{boss:true}).frame>=3);});
+ pass('boss phase restart resets animation clock',()=>{boss.state='roots';boss.timer=1.4;a.tick(boss,.01);assert.equal(a.sample(boss,{boss:true}).frame,0);});
+ pass('mob windup holds anticipation and recovery plays attack follow-through',()=>{const e={type:0,hp:65,state:'windup',timer:.7};a.tick(e,.1);assert.equal(a.sample(e).row,1);e.state='recover';e.timer=.75;a.tick(e,.01);assert.equal(a.sample(e).frame,4);a.tick(e,.1);assert.equal(a.sample(e).frame,5);});
+ pass('mob flinch selects actual hurt row',()=>{const e={type:1,hp:20,state:'recover',flinch:.3};a.tick(e,.1);assert.equal(a.sample(e).row,2);});
+ pass('death is one-shot and finishes rather than looping',()=>{boss.hp=0;boss.state='dead';a.tick(boss,.01);for(let i=0;i<8;i++)a.tick(boss,.1);let s=a.sample(boss,{boss:true});assert.equal(s.row,7);assert.equal(s.frame,5);assert(s.alpha<1);a.tick(boss,.1);a.tick(boss,.1);assert(a.sample(boss,{boss:true}).finished);});
+ const ctx={globalAlpha:1,save(){calls.push('save');},restore(){calls.push('restore');},translate(...v){calls.push(['translate',...v]);},scale(...v){calls.push(['scale',...v]);},drawImage(...v){calls.push(['image',...v.slice(1)]);}};
+ pass('right-facing entity flips left-facing atlas',()=>{const e={type:2,hp:90,state:'walk',x:500,y:620,dir:1};a.tick(e,.05);assert(a.drawEntity(ctx,e,{cameraX:100}));assert(calls.some(v=>Array.isArray(v)&&v[0]==='scale'&&v[1]===-1));});
+ pass('render does not mutate entity or animation clock',()=>{const e={type:0,hp:65,state:'walk',x:650,y:620,dir:-1};a.tick(e,.1);const before=JSON.stringify(e),age=a.sample(e).age;a.drawEntity(ctx,e,{cameraX:0});assert.equal(JSON.stringify(e),before);assert.equal(a.sample(e).age,age);});
+ pass('offscreen entities are handled without draw calls',()=>{calls.length=0;assert(a.drawEntity(ctx,{type:0,hp:10,state:'walk',x:9000,y:620,dir:-1},{cameraX:0}));assert.equal(calls.length,0);});
+ pass('unknown species falls back to legacy sprite renderer',()=>assert.equal(a.drawEntity(ctx,{type:99,hp:1,state:'walk',x:10,y:620},{}),false));
+ pass('dead-age integration honors existing elapsed death time',()=>{const e={type:0,hp:0,state:'dead',deathAge:1};assert(a.sample(e).finished);});
+ console.log('RESULT '+JSON.stringify({passed:count,errors:[]}));
+})().catch(e=>{console.error(e);process.exit(1)});

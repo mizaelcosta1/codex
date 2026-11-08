@@ -1,0 +1,22 @@
+PASS Base drop and rarity probabilities agree with displayed rules
+PASS Luck profiles remain normalized and bounded from 0 to 20
+PASS A failed common-monster roll produces no item
+PASS Boss rarity roll is guaranteed and never common or uncommon
+PASS Starter inventory has real usable health, mana and aura resources
+PASS Health and mana consumables cannot be consumed while full
+PASS Mana spending rejects insufficient resources without going negative
+PASS Mana potion restores real mana and removes one item
+PASS Mana regeneration stops during pause and cinematics
+PASS Aura consumable funds a real attribute purchase at an altar
+PASS Attribute purchases fail outside an altar and spend nothing
+PASS Vitality and magic investments update capacities and damage
+PASS Equipment has a single active slot and ownership is required
+PASS Item stacks and overall backpack capacity are enforced
+PASS Full-bag loot remains on the floor instead of disappearing
+PASS Collected loot is absent from the serialized save and not duplicated
+PASS Common-monster reward hooks award aura once per enemy instance
+PASS Boss reward has fixed unique relic and cannot be granted twice
+PASS A full backpack safely defers the guaranteed boss relic
+PASS Save migration preserves legacy progression and clamps invalid RPG data
+PASS Death retains bound aura and inventory while resetting transient drops
+RESULT {"passed":21}

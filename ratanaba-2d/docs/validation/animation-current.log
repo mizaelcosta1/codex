@@ -1,0 +1,19 @@
+PASS boss idle uses row 0 and loops
+PASS boss run uses distinct row 1
+PASS boss stalk uses distinct row 1
+PASS boss windup uses distinct row 2
+PASS boss charge uses distinct row 3
+PASS boss roots uses distinct row 4
+PASS boss echo uses distinct row 5
+PASS boss recover uses distinct row 6
+PASS attack frame progresses through authored sequence
+PASS boss phase restart resets animation clock
+PASS mob windup holds anticipation and recovery plays attack follow-through
+PASS mob flinch selects actual hurt row
+PASS death is one-shot and finishes rather than looping
+PASS right-facing entity flips left-facing atlas
+PASS render does not mutate entity or animation clock
+PASS offscreen entities are handled without draw calls
+PASS unknown species falls back to legacy sprite renderer
+PASS dead-age integration honors existing elapsed death time
+RESULT {"passed":18,"errors":[]}

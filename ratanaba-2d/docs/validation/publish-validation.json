@@ -1,0 +1,14 @@
+{
+  "game_browser_checks_passed": 89,
+  "rpg_unit_checks_passed": 21,
+  "animation_unit_checks_passed": 18,
+  "native_lifecycle_unit_checks_passed": 17,
+  "android_build": "actual signed debug APK built with Android SDK35 and Java compiler",
+  "physical_device": "not tested: no attached Android device",
+  "browser_host": "Chromium remote renderer; local Chromium blocked by socket permissions",
+  "commit_base": "19dac88b8dca519d9d632ba1b0f6f8206b439d63",
+  "package": "br.com.ratanaba.guardians2d",
+  "apk_version": "0.5.1",
+  "min_android": "8.0/API26",
+  "apk_sha256": "427195b0fd765534ca1bf176e6d0794443f26c63c5702433a9d7a5d6b0c80918"
+}
