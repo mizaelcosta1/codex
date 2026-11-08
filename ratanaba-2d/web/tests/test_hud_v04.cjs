@@ -28,6 +28,8 @@ const {chromium}=require('playwright'),fs=require('fs'),path=require('path');
  // Browser hit testing catches misplaced controls and guard/action overlaps.
  for(const viewport of [{width:1280,height:720},{width:844,height:390},{width:390,height:844}]){
   await page.setViewportSize(viewport);
+  // Trial clicks wait for the browser's painted hit-test tree after resize.
+  for(const selector of ['.orb-heal','.pad-left','.pad-right','.pad-up','.pad-down','#clubButton','.action-jump','.action-dodge','.action-magic','.action-guard'])await page.locator(selector).click({trial:true});
   const geometry=await page.evaluate(()=>{
    const selectors=['.orb-heal','.pad-left','.pad-right','.pad-up','.pad-down','#clubButton','.action-jump','.action-dodge','.action-magic','.action-guard'];
    const buttons=selectors.map(s=>document.querySelector(s));
