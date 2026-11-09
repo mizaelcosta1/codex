@@ -23,8 +23,7 @@
 <div id="bossHud"><span>CURUPIRA</span><small>O ARREPENDIMENTO TEMPORAL</small><div class="bar boss"><i id="bossLife"></i></div></div>
 <div id="toast"></div><footer><span id="objective"></span><span id="combo"></span></footer>
 <nav id="touch" aria-label="Controles do jogo">
- <div class="direction-pad"><img src="../assets/hud_v04/dpad.webp" alt="">
- <button class="hud-hit pad-left" data-hold="left" aria-label="Mover para esquerda"></button><button class="hud-hit pad-right" data-hold="right" aria-label="Mover para direita"></button><button class="hud-hit pad-up" data-tap="jump" aria-label="Pular"></button><button class="hud-hit pad-down" data-tap="interact" aria-label="Interagir no altar"></button></div>
+ <div class="direction-pad" id="moveStick" role="application" aria-label="Analógico virtual para movimentação"><div class="stick-ring"></div><div class="stick-knob" id="stickKnob"></div><span class="stick-hint">MOVER</span><button class="stick-interact" data-tap="interact" aria-label="Interagir no altar"></button></div>
  <div class="action-pad">
  <button id="clubButton" class="hud-hit action-club" aria-label="Golpe; segure para ataque pesado" title="Toque: golpe · segure: pesado · J/L"><img src="../assets/hud_v04/attack.webp" alt=""><small>GOLPE</small></button>
  <button class="hud-hit action-jump" data-tap="jump" aria-label="Pular (Espaço)"><img src="../assets/hud_v04/jump.webp" alt=""><small>PULO</small></button>
