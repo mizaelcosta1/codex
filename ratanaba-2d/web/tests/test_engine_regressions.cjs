@@ -28,7 +28,7 @@ const tests={
  },
  'altar chests use the same camera coordinates as the world':async({g,calls})=>{
   g.warp(4750);calls.length=0;g.render();const chest=calls.find(a=>a[0]._src?.endsWith('chest_rarities.svg')&&a[1]===256);assert(chest);assert.equal(chest[5],458-42-g.state.cam);
- ,
+ },
  'Curupira victory unlocks and enters the hidden sanctuary':async({g})=>{
   g.state.boss.state='dead';g.state.boss.hp=0;g.warp(5890);g.update(1/60);assert.equal(g.state.won,true);g.pressed.add('interact');g.update(1/60);assert.equal(g.state.area,3);assert.equal(g.state.p.x,6100);assert.equal(g.state.visited[3],true);assert.equal(g.state.checkpoint.x,6100);
  }
