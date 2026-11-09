@@ -43,11 +43,11 @@
  club.onclick=e=>{if(e.detail===0)emit('light');};
  addEventListener('blur',()=>{clearTimeout(holdTimer);pointer=null;});
  function drawMinimap(s){mc.clearRect(0,0,280,280);mc.fillStyle='#0c141b';mc.fillRect(0,0,280,280);mc.strokeStyle='#1e2d32';mc.lineWidth=1;for(let x=0;x<280;x+=20){mc.beginPath();mc.moveTo(x,0);mc.lineTo(x,280);mc.stroke();}for(let y=0;y<280;y+=20){mc.beginPath();mc.moveTo(0,y);mc.lineTo(280,y);mc.stroke();}
-  for(let i=0;i<3;i++){const x=12+i*89;mc.fillStyle=s.visited[i]?'#273d3e':'#101d24';mc.fillRect(x,85,78,95);mc.lineWidth=2;mc.strokeStyle=s.area===i?'#92c7b4':s.visited[i]?'#556961':'#293c42';mc.strokeRect(x,85,78,95);mc.fillStyle='#b4a789';mc.font='16px Georgia';mc.textAlign='center';mc.fillText(['I','II','III'][i],x+39,113);if(i<2){mc.fillStyle=i===1&&!s.seals.every(Boolean)?'#ad7b4d':'#657d6d';mc.fillRect(x+78,128,11,9);}}
-  mc.strokeStyle='#9f8a58';mc.lineWidth=2;for(const x of [20,99,223]){mc.beginPath();mc.moveTo(x,170);mc.lineTo(x+8,170);mc.stroke();}
+  for(let i=0;i<4;i++){const x=12+i*66;mc.fillStyle=s.visited[i]?'#273d3e':'#101d24';mc.fillRect(x,85,58,95);mc.lineWidth=2;mc.strokeStyle=s.area===i?'#92c7b4':s.visited[i]?'#556961':'#293c42';mc.strokeRect(x,85,58,95);mc.fillStyle='#b4a789';mc.font='15px Georgia';mc.textAlign='center';mc.fillText(['I','II','III','IV'][i],x+29,113);if(i===1){mc.fillStyle=!s.seals.every(Boolean)?'#ad7b4d':'#657d6d';mc.fillRect(x+58,128,8,9);}}
+  mc.strokeStyle='#9f8a58';mc.lineWidth=2;for(const x of [20,78,144,210]){mc.beginPath();mc.moveTo(x,170);mc.lineTo(x+8,170);mc.stroke();}
   if(s.boss.state!=='dead'){mc.fillStyle='#b84c4e';mc.beginPath();mc.arc(250,142,6,0,Math.PI*2);mc.fill();}
-  const area=Math.min(2,s.area),roomX=12+area*89,local=area===0?s.p.x/1900:area===1?(s.p.x-1900)/2000:(s.p.x-3900)/2100;
-  mc.fillStyle='#83ece0';mc.shadowColor='#5ccdc5';mc.shadowBlur=8;mc.beginPath();mc.arc(roomX+7+Math.max(0,Math.min(1,local))*63,155-(620-s.p.y)*.10,5,0,Math.PI*2);mc.fill();mc.shadowBlur=0;
+  const area=Math.min(3,s.area),roomX=12+area*66,local=area===0?s.p.x/1900:area===1?(s.p.x-1900)/2000:area===2?(s.p.x-3900)/2100:(s.p.x-6000)/1500;
+  mc.fillStyle='#83ece0';mc.shadowColor='#5ccdc5';mc.shadowBlur=8;mc.beginPath();mc.arc(roomX+6+Math.max(0,Math.min(1,local))*46,155-(620-s.p.y)*.10,5,0,Math.PI*2);mc.fill();mc.shadowBlur=0;
   mc.fillStyle='#bca77c';mc.font='14px Georgia';mc.textAlign='center';mc.fillText('RATANABÁ',140,221);mc.fillStyle='#7ca69a';mc.font='12px sans-serif';mc.fillText('✦ Banido    ♦ Guardião',140,244);
  }
  function sync(dt=0){const g=game();if(!g)return;const s=g.state;document.body.classList.toggle('playing',s.running);if(active&&(!s.running||s.cinematic?.id!==active))endScene();document.body.classList.toggle('cinematic',!!s.cinematic);$('#cutscene').hidden=!active;$('#cinemaBars').hidden=!active;
