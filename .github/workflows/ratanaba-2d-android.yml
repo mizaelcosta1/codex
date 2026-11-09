@@ -34,6 +34,7 @@ jobs:
           node web/tests/test_elemental_unit.cjs
           node web/tests/preflight.cjs
           node web/tests/test_engine_regressions.cjs
+          node web/tests/test_progression.cjs
           python3 -m unittest discover -s tools/tests -p 'test_*.py'
           node web/tests/test_rpg_unit.cjs
           node web/tests/test_animation_unit.cjs
@@ -48,6 +49,7 @@ jobs:
       - name: Browser combat, HUD and RPG regression tests
         working-directory: ratanaba-2d
         run: |
+          node web/tests/test_progression_browser.cjs
           node web/tests/test_hud_v04.cjs
           node web/tests/test_game.cjs
           node web/tests/test_v03.cjs
@@ -66,7 +68,7 @@ jobs:
       - name: Upload installable development APK and validation
         uses: actions/upload-artifact@v4
         with:
-          name: ratanaba-guardians-2d-v0.6.1-android-debug
+          name: ratanaba-guardians-2d-v0.7.0-android-debug
           if-no-files-found: error
           retention-days: 30
           path: |

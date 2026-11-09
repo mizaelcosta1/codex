@@ -27,11 +27,12 @@
   venom_gland:{name:'Seiva Corrompida',icon:13,rarity:'rare',kind:'material',description:'Material elemental. Transmutar concede 4 aura e 1 reagente de veneno.',element:3},
   curse_amulet:{name:'Amuleto da Ferida',icon:14,rarity:'epic',kind:'equipment',bonus:3,description:'Equipamento: +3 de dano físico e mágico. Só um amuleto ou relíquia pode ficar equipado.'},
   legend_mask:{name:'Máscara do Nome Apagado',icon:15,rarity:'legendary',kind:'equipment',bonus:7,description:'Equipamento lendário: +7 de dano físico e mágico.'},
+  boitata_scale:{name:'Escama da Memória Ardente',icon:10,rarity:'relic',kind:'equipment',bonus:5,description:'Relíquia única de Boitatá. +5 de dano físico e mágico. Recompensa fixa concedida uma única vez.',quest:true},
   curupira_relic:{name:'Rastro do Curupira',icon:15,rarity:'relic',kind:'equipment',bonus:4,description:'Relíquia única do Guardião. +4 de dano físico. Recompensa fixa, concedida uma única vez; não depende de sorte.',meleeOnly:true,quest:true}
  };
  const ATTRS={strength:{name:'Força',icon:4,description:'+2 de dano físico por ponto.'},vitality:{name:'Vitalidade',icon:5,description:'+12 de vida máxima por ponto.'},magic:{name:'Magia',icon:6,description:'+5 de mana máxima e +2 de dano mágico por ponto.'},luck:{name:'Sorte',icon:7,description:'+2 pontos percentuais de saque por ponto, até 90%; favorece raridades superiores.'}};
  const POOLS=Object.fromEntries(RARITIES.slice(0,5).map(r=>[r.id,Object.keys(ITEMS).filter(id=>ITEMS[id].rarity===r.id)]));
- const ALTERS=[{x:170,y:620},{x:2000,y:620},{x:4750,y:620}],CAPACITY=24,STACK=99;
+ const ALTERS=HOST.RatanabaWorld?.ALTARS||[{x:170,y:620},{x:2000,y:620},{x:4750,y:620},{x:5480,y:1580}],CAPACITY=24,STACK=99;
  let current=null,modal=null,active=null,previousPause=false,previousFocus=null,heldState=null,selected=0,dirty=false;
  const g=()=>HOST.Ratanaba, getState=()=>g()?.state||current;
  const finite=(v,f=0)=>Number.isFinite(Number(v))?Number(v):f;
@@ -58,12 +59,13 @@
   const attrs=Object.fromEntries(Object.keys(ATTRS).map(k=>[k,integer(d?.attrs?.[k],0,20)]));
   const inventory=d?cleanInventory(d.inventory):[{id:'health_small',qty:2},{id:'mana_small',qty:2},{id:'aura_small',qty:1}];
   // Missing RPG data is migrated as a fresh RPG layer; legacy level/essence/seals stay owned by the core.
-  state.rpg={version:1,attrs,aura:integer(d?.aura),mana:0,maxMana:80+attrs.magic*5,inventory,equipped:null,bossRewarded:!!d?.bossRewarded,pending:[]};
+  state.rpg={version:1,attrs,aura:integer(d?.aura),mana:0,maxMana:80+attrs.magic*5,inventory,equipped:null,bossRewarded:!!d?.bossRewarded,boitataRewarded:!!d?.boitataRewarded,pending:[]};
   state.rpg.mana=d?Math.max(0,Math.min(state.rpg.maxMana,finite(d.mana,state.rpg.maxMana))):state.rpg.maxMana;
   if(d?.equipped&&inventory.some(x=>x.id===d.equipped)&&ITEMS[d.equipped]?.kind==='equipment')state.rpg.equipped=d.equipped;
-  if(Array.isArray(d?.pending))state.rpg.pending=d.pending.filter(x=>x&&ITEMS[x.id]&&ITEMS[x.id].quest).map(x=>({id:x.id,qty:1})).slice(0,1);
-  state.rpgDrops=(Array.isArray(d?.worldDrops)?d.worldDrops:[]).filter(x=>x&&ITEMS[x.id]&&Number.isFinite(x.x)&&Number.isFinite(x.y)).slice(0,256).map(x=>({id:x.id,qty:integer(x.qty,1,STACK),rarity:ITEMS[x.id].rarity,x:Math.max(0,Math.min(6000,x.x)),y:Math.max(0,Math.min(700,x.y))}));
+  if(Array.isArray(d?.pending))state.rpg.pending=d.pending.filter(x=>x&&ITEMS[x.id]&&ITEMS[x.id].quest).map(x=>({id:x.id,qty:1})).slice(0,2);
+  state.rpgDrops=(Array.isArray(d?.worldDrops)?d.worldDrops:[]).filter(x=>x&&ITEMS[x.id]&&Number.isFinite(x.x)&&Number.isFinite(x.y)).slice(0,256).map(x=>({id:x.id,qty:integer(x.qty,1,STACK),rarity:ITEMS[x.id].rarity,x:Math.max(0,Math.min(6000,x.x)),y:Math.max(0,Math.min(2300,x.y))}));
   if(state.boss?.state==='dead'&&!d?.bossRewarded){state.rpg.bossRewarded=true;if(!state.rpg.inventory.some(x=>x.id==='curupira_relic'))giveQuestRelic(state);}
+  if(state.boitata?.state==='dead'&&!d?.boitataRewarded){state.rpg.boitataRewarded=true;giveQuestRelic(state,'boitata_scale');}
   recompute(state,false);selected=0;dirty=true;return state.rpg;
  }
  function ensure(state=getState()){if(!state)return null;if(!state.rpg)initialize(state);return state.rpg;}
@@ -77,19 +79,19 @@
   while(left>0&&r.inventory.length<CAPACITY){const n=ITEMS[id].quest?1:Math.min(STACK,left);r.inventory.push({id,qty:n});left-=n;added+=n;if(ITEMS[id].quest)break;}
   dirty=true;return added;
  }
- function giveQuestRelic(state=getState()){if(!addItem('curupira_relic',1,state)&&!state.rpg.inventory.some(x=>x.id==='curupira_relic'))state.rpg.pending=[{id:'curupira_relic',qty:1}];}
+ function giveQuestRelic(state=getState(),id='curupira_relic'){if(!addItem(id,1,state)&&!state.rpg.inventory.some(x=>x.id===id)&&!state.rpg.pending.some(x=>x.id===id))state.rpg.pending.push({id,qty:1});}
  function onKill(enemy,isBoss=false,rng=Math.random){
   const s=getState(),r=ensure(s);if(!s||!enemy||enemy._rpgRewarded)return false;
-  enemy._rpgRewarded=true;if(isBoss&&r.bossRewarded)return false;
-  r.aura=Math.min(9999999,r.aura+(isBoss?20:2));
-  if(isBoss){r.bossRewarded=true;giveQuestRelic(s);}
+  const boitata=isBoss&&enemy.kind==='boitata',rewardKey=boitata?'boitataRewarded':'bossRewarded';enemy._rpgRewarded=true;if(isBoss&&r[rewardKey])return false;
+  r.aura=Math.min(9999999,r.aura+(boitata?30:isBoss?20:2));
+  if(isBoss){r[rewardKey]=true;giveQuestRelic(s,boitata?'boitata_scale':'curupira_relic');}
   const drop=rollLoot(r.attrs.luck,isBoss,rng);
-  if(drop){s.rpgDrops.push({...drop,x:Math.max(20,Math.min(5980,enemy.x)),y:Math.min(610,enemy.y-20)});if(s.rpgDrops.length>256)s.rpgDrops.shift();}
-  notify(isBoss?'AURA +20 · Rastro do Curupira vinculado à mochila.':'AURA +2'+(drop?' · '+rarity(drop.rarity).name+' no chão.':''));save();return drop;
+  if(drop){s.rpgDrops.push({...drop,x:Math.max(20,Math.min(5980,enemy.x)),y:Math.min(2210,enemy.y-20)});if(s.rpgDrops.length>256)s.rpgDrops.shift();}
+  notify(boitata?'AURA +30 · Escama de Boitatá vinculada à mochila.':isBoss?'AURA +20 · Rastro do Curupira vinculado à mochila.':'AURA +2'+(drop?' · '+rarity(drop.rarity).name+' no chão.':''));save();return drop;
  }
  function collectDrop(drop){const s=getState();if(!drop||!ITEMS[drop.id])return false;const added=addItem(drop.id,drop.qty||1,s);if(!added){if(!drop.warned){notify('Mochila cheia. Use ou transmute itens para abrir espaço.');drop.warned=true;}return false;}drop.qty=(drop.qty||1)-added;if(drop.qty<=0){const index=s.rpgDrops.indexOf(drop);if(index>=0)s.rpgDrops.splice(index,1);}notify(ITEMS[drop.id].name+' ×'+added+' · '+rarity(ITEMS[drop.id].rarity).name);save();return drop.qty<=0;}
  function tick(dt){const s=getState(),r=ensure(s);if(!r||!s.running||s.paused||s.uiBlocked||s.cinematic)return;r.mana=Math.min(r.maxMana,r.mana+Math.max(0,finite(dt))*2);
-  if(r.pending.length&&r.inventory.length<CAPACITY){for(const item of r.pending)addItem(item.id,item.qty,s);r.pending=[];save();}
+  if(r.pending.length&&r.inventory.length<CAPACITY){r.pending=r.pending.filter(item=>!addItem(item.id,item.qty,s)&&!r.inventory.some(x=>x.id===item.id));save();}
   for(let i=s.rpgDrops.length-1;i>=0;i--){const d=s.rpgDrops[i];if(Math.hypot(s.p.x-d.x,s.p.y-d.y)<65)collectDrop(d);}
  }
  function canCast(){const r=ensure();return !!r&&r.mana>=18;}
@@ -129,8 +131,8 @@
   }
   dirty=false;
  }
- function itemOdds(id){const item=ITEMS[id];if(item.quest)return 'Recompensa fixa de Curupira: 100%, uma única vez.';const r=ensure(),p=lootProfile(r.attrs.luck,false),rr=p.rarities.find(v=>v.id===item.rarity);return 'Chance atual por monstro: '+percent(rr.absolute/rr.items.length)+'. Sorteio uniforme entre '+rr.items.length+' itens desta raridade.';}
- function oddsTable(){const r=ensure(),p=lootProfile(r.attrs.luck,false),boss=lootProfile(r.attrs.luck,true);return '<details class="rpg-odds"><summary>CHANCES REAIS DE SAQUE · SORTE '+r.attrs.luck+'</summary><p>Monstro comum: '+percent(p.chance)+' de obter um item; '+percent(p.none)+' de não obter item. Entre os itens que saem, cada raridade tem a distribuição abaixo.</p><table><thead><tr><th>Raridade</th><th>Entre saques</th><th>Por monstro</th><th>Boss</th></tr></thead><tbody>'+p.rarities.map((v,i)=>'<tr><td style="color:'+v.color+'">'+v.name+'</td><td>'+percent(v.conditional)+'</td><td>'+percent(v.absolute)+'</td><td>'+percent(boss.rarities[i].absolute)+'</td></tr>').join('')+'</tbody></table><p>Boss: um item aleatório garantido + Rastro do Curupira fixo. O boss atual concede sua recompensa uma única vez por vigília salva. Sorte nunca garante um lendário.</p></details>';}
+ function itemOdds(id){const item=ITEMS[id];if(item.quest)return 'Recompensa fixa de '+(id==='boitata_scale'?'Boitatá':'Curupira')+': 100%, uma única vez.';const r=ensure(),p=lootProfile(r.attrs.luck,false),rr=p.rarities.find(v=>v.id===item.rarity);return 'Chance atual por monstro: '+percent(rr.absolute/rr.items.length)+'. Sorteio uniforme entre '+rr.items.length+' itens desta raridade.';}
+ function oddsTable(){const r=ensure(),p=lootProfile(r.attrs.luck,false),boss=lootProfile(r.attrs.luck,true);return '<details class="rpg-odds"><summary>CHANCES REAIS DE SAQUE · SORTE '+r.attrs.luck+'</summary><p>Monstro comum: '+percent(p.chance)+' de obter um item; '+percent(p.none)+' de não obter item. Entre os itens que saem, cada raridade tem a distribuição abaixo.</p><table><thead><tr><th>Raridade</th><th>Entre saques</th><th>Por monstro</th><th>Boss</th></tr></thead><tbody>'+p.rarities.map((v,i)=>'<tr><td style="color:'+v.color+'">'+v.name+'</td><td>'+percent(v.conditional)+'</td><td>'+percent(v.absolute)+'</td><td>'+percent(boss.rarities[i].absolute)+'</td></tr>').join('')+'</tbody></table><p>Boss: um item aleatório garantido + a relíquia fixa do respectivo Guardião. Cada Guardião concede sua recompensa fixa uma única vez por vigília salva. Sorte nunca garante um lendário.</p></details>';}
  function open(tab='bag'){
   const s=getState();if(!s?.running||s.cinematic||s.uiBlocked&&!active||!modal)return false;ensure(s);
   if(!active){previousPause=s.paused;previousFocus=document.activeElement;heldState=s;s.paused=true;s.uiBlocked=true;g()?.keys.clear();g()?.pressed.clear();}
@@ -143,7 +145,7 @@
   document.querySelector('#backpackOpen').onclick=()=>open('bag');document.querySelector('#auraOpen').onclick=()=>open('aura');
   modal.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.hasAttribute('data-rpg-close')){close();return;}if(b.dataset.rpgTab){open(b.dataset.rpgTab);return;}if(b.dataset.rpgSelect!==undefined){selected=Number(b.dataset.rpgSelect);dirty=true;}else if(b.dataset.rpgUse!==undefined){const result=useItem(Number(b.dataset.rpgUse));modal.querySelector('#rpgFeedback').textContent=result.ok?'Item aplicado.':result.reason||'Item indisponível.';}else if(b.dataset.rpgDiscard!==undefined){discard(Number(b.dataset.rpgDiscard));modal.querySelector('#rpgFeedback').textContent='Pilha descartada.';}else if(b.dataset.rpgUpgrade){const result=upgrade(b.dataset.rpgUpgrade);modal.querySelector('#rpgFeedback').textContent=result.ok?'O vínculo tornou-se mais forte.':result.reason;}if(dirty)render();});
   document.addEventListener('keydown',e=>{const s=getState();if(e.code==='KeyB'||e.code==='KeyN'){if(!s?.running||s.cinematic||s.uiBlocked&&!active)return;e.preventDefault();e.stopImmediatePropagation();if(e.repeat)return;const tab=e.code==='KeyB'?'bag':'aura';if(active===tab)close();else open(tab);return;}if(!active)return;if(e.code==='Escape'){e.preventDefault();e.stopImmediatePropagation();close();return;}if(e.key==='Tab'){const focusable=[...modal.querySelectorAll('button:not([disabled]),summary')].filter(x=>x.getClientRects().length);if(e.shiftKey&&document.activeElement===focusable[0]){e.preventDefault();focusable.at(-1)?.focus();}else if(!e.shiftKey&&document.activeElement===focusable.at(-1)){e.preventDefault();focusable[0]?.focus();}}},true);
-  const sync=()=>{const s=getState();if(active&&(!s?.running||s!==heldState))close(true);const r=ensure(s);document.body.classList.toggle('boss-fight',!!s&&s.boss.state!=='dormant'&&s.boss.state!=='dead');if(r){document.querySelector('#rpgManaNumber').textContent=Math.ceil(r.mana)+' / '+r.maxMana;document.querySelector('#rpgManaFill').style.width=100*r.mana/r.maxMana+'%';const bar=document.querySelector('#rpgManaFill').parentElement;bar.setAttribute('aria-valuenow',Math.round(r.mana));bar.setAttribute('aria-valuemax',r.maxMana);document.querySelector('#rpgAuraNumber').textContent=r.aura;if(active&&dirty)render();}requestAnimationFrame(sync);};requestAnimationFrame(sync);
+  const sync=()=>{const s=getState();if(active&&(!s?.running||s!==heldState))close(true);const r=ensure(s);document.body.classList.toggle('boss-fight',!!s&&s.boss.state!=='dormant'&&s.boss.state!=='dead'||!!s&&s.boitata?.state!=='dormant'&&s.boitata?.state!=='dead');if(r){document.querySelector('#rpgManaNumber').textContent=Math.ceil(r.mana)+' / '+r.maxMana;document.querySelector('#rpgManaFill').style.width=100*r.mana/r.maxMana+'%';const bar=document.querySelector('#rpgManaFill').parentElement;bar.setAttribute('aria-valuenow',Math.round(r.mana));bar.setAttribute('aria-valuemax',r.maxMana);document.querySelector('#rpgAuraNumber').textContent=r.aura;if(active&&dirty)render();}requestAnimationFrame(sync);};requestAnimationFrame(sync);
  }
  const API={RARITIES,ITEMS,ATTRS,CAPACITY,STACK,lootProfile,rollLoot,initialize,serialize,tick,onKill,collectDrop,renderDrops,canCast,spendMana,damageBonus,onRest,onDeath,nearAltar,upgradeCost,upgrade,useItem,equip,discard,addItem,recompute,open,close,get active(){return active;}};
  HOST.RatanabaRPG=API;if(typeof module!=='undefined'&&module.exports)module.exports=API;

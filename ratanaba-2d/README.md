@@ -1,10 +1,14 @@
 # Ratanabá Guardians — Crônicas do Exílio 2D
 
-Cliente 2D RPG/metroidvania 0.5 com três áreas, oito inimigos comuns, Curupira, combate, quatro elementos, mochila, raridades, mana e evolução por aura. Este projeto está separado do protótipo Godot 3D na raiz do repositório.
+Cliente 2D RPG/metroidvania 0.7 com quatro áreas, oito inimigos comuns, Curupira e Boitatá, combate, quatro elementos, mochila, raridades, mana e evolução por aura. Este projeto está separado do protótipo Godot 3D na raiz do repositório.
 
 ## Jogar no navegador
 
 Abra `web/index.html` mantendo a pasta assets no lugar, ou rode `python3 -m http.server 8000` nesta pasta e acesse `/web/`. Sem dependências JavaScript externas em execução. B abre a mochila; N abre aura; U conjura magia; J/L atacam; K esquiva; Espaço pula.
+
+## Depois do Curupira
+
+A vitória abre a descida à direita da arena para o Vale das Cinzas. As plataformas têm degraus de até 140 px, permitindo voltar por saltos. Segure ↓/S e pule para atravessar uma plataforma; no toque, segure o direcional inferior e pressione PULO. Há um altar na plataforma intermediária e Boitatá na arena ao fundo. Saves anteriores com Curupira derrotado já têm a passagem aberta. Os fundos se misturam gradualmente ao caminhar e descer.
 
 ## Android
 

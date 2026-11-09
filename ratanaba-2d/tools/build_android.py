@@ -6,8 +6,8 @@ from pathlib import Path
 import argparse, hashlib, json, os, re, shutil, subprocess, sys, zipfile
 
 ROOT=Path(__file__).resolve().parents[1]
-VERSION_NAME='0.6.1'
-VERSION_CODE=601
+VERSION_NAME='0.7.0'
+VERSION_CODE=700
 
 def run(args,**kwargs):
     result=subprocess.run([str(a) for a in args],text=True,capture_output=True,**kwargs)
@@ -18,7 +18,7 @@ def run(args,**kwargs):
 
 def runtime_files():
     files=[]
-    for name in ('index.html','elemental.js','game.js','menu.js','hud.js','animations.js','rpg.js','native-bridge.js','style.css','hud.css','rpg.css'):
+    for name in ('index.html','elemental.js','world.js','game.js','menu.js','hud.js','animations.js','rpg.js','native-bridge.js','style.css','hud.css','rpg.css'):
         files.append(ROOT/'web'/name)
     for folder in ('pack','ui_v03','hud_v04','animations_v05','rpg_v05'):
         files += sorted((ROOT/'assets'/folder).glob('*.webp'))

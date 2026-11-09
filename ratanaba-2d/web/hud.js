@@ -12,10 +12,12 @@
    ['CURUPIRA','Teus passos… Não. Este caminho já aconteceu.\nPor que o ontem não me devolve teu rosto?','curupira'],
    ['CURUPIRA','Se eu apagar teu rastro… talvez o tempo recomece.\nPerdoa-me, meu amigo.','curupira']
   ],
+  boitata_intro:[['O BANIDO','As raízes abriram um caminho para baixo.\nBoitatá ainda guarda a memória das cinzas.','banido'],['O BANIDO','A água expõe tua chama.\nEsperarei o fim da investida.','banido']],
+  boitata_farewell:[['O BANIDO','A chama se aquieta.\nNem toda memória precisa continuar ardendo.','banido'],['O BANIDO','Curupira abriu o rastro. Tu guardaste as cinzas.\nEu levarei as duas lembranças.','banido']],
   curupira_farewell:[
    ['CURUPIRA','Meus rastros… mentiram para o chão.\nQuerendo o ontem, o amanhã eu… ceguei.','curupira'],
    ['CURUPIRA','O tempo é um laço que o código não desata.\nLeve meu rastro. Não olhe.','curupira'],
-   ['O BANIDO','Onde houve busca, que agora haja o Nada.\nDescansa. Eu carregarei a memória.','banido']
+   ['O BANIDO','Onde houve busca, que agora haja o Nada.\nDescansa. Eu carregarei a memória.\nSeguirei pelas raízes, até o Vale das Cinzas.','banido']
   ]
  };
  let seen=new Set(),active=null,line=0,shown=0,typeTime=0,last=performance.now(),focusBefore=null;
@@ -36,13 +38,15 @@
  club.onpointercancel=club.onlostpointercapture=()=>{clearTimeout(holdTimer);pointer=null;};
  club.onclick=e=>{if(e.detail===0)emit('light');};
  addEventListener('blur',()=>{clearTimeout(holdTimer);pointer=null;});
- function drawMinimap(s){mc.clearRect(0,0,280,280);mc.fillStyle='#0c141b';mc.fillRect(0,0,280,280);mc.strokeStyle='#1e2d32';mc.lineWidth=1;for(let x=0;x<280;x+=20){mc.beginPath();mc.moveTo(x,0);mc.lineTo(x,280);mc.stroke();}for(let y=0;y<280;y+=20){mc.beginPath();mc.moveTo(0,y);mc.lineTo(280,y);mc.stroke();}
-  for(let i=0;i<3;i++){const x=12+i*89;mc.fillStyle=s.visited[i]?'#273d3e':'#101d24';mc.fillRect(x,85,78,95);mc.lineWidth=2;mc.strokeStyle=s.area===i?'#92c7b4':s.visited[i]?'#556961':'#293c42';mc.strokeRect(x,85,78,95);mc.fillStyle='#b4a789';mc.font='16px Georgia';mc.textAlign='center';mc.fillText(['I','II','III'][i],x+39,113);if(i<2){mc.fillStyle=i===1&&!s.seals.every(Boolean)?'#ad7b4d':'#657d6d';mc.fillRect(x+78,128,11,9);}}
-  mc.strokeStyle='#9f8a58';mc.lineWidth=2;for(const x of [20,99,223]){mc.beginPath();mc.moveTo(x,170);mc.lineTo(x+8,170);mc.stroke();}
-  if(s.boss.state!=='dead'){mc.fillStyle='#b84c4e';mc.beginPath();mc.arc(250,142,6,0,Math.PI*2);mc.fill();}
-  const area=Math.min(2,s.area),roomX=12+area*89,local=area===0?s.p.x/1900:area===1?(s.p.x-1900)/2000:(s.p.x-3900)/2100;
-  mc.fillStyle='#83ece0';mc.shadowColor='#5ccdc5';mc.shadowBlur=8;mc.beginPath();mc.arc(roomX+7+Math.max(0,Math.min(1,local))*63,155-(620-s.p.y)*.10,5,0,Math.PI*2);mc.fill();mc.shadowBlur=0;
-  mc.fillStyle='#bca77c';mc.font='14px Georgia';mc.textAlign='center';mc.fillText('RATANABÁ',140,221);mc.fillStyle='#7ca69a';mc.font='12px sans-serif';mc.fillText('✦ Banido    ♦ Guardião',140,244);
+ function drawMinimap(s){
+  mc.clearRect(0,0,280,280);mc.fillStyle='#0c141b';mc.fillRect(0,0,280,280);
+  const rooms=[{x:12,y:55,w:78,h:65},{x:101,y:55,w:78,h:65},{x:190,y:55,w:78,h:65},{x:190,y:155,w:78,h:65}];
+  for(let i=0;i<rooms.length;i++){const r=rooms[i];mc.fillStyle=s.visited[i]?'#273d3e':'#101d24';mc.fillRect(r.x,r.y,r.w,r.h);mc.strokeStyle=s.area===i?'#92c7b4':'#556961';mc.lineWidth=2;mc.strokeRect(r.x,r.y,r.w,r.h);mc.font='14px Georgia';mc.fillStyle='#bca77c';mc.textAlign='center';mc.fillText(['I','II','III','IV'][i],r.x+r.w/2,r.y+20);}
+  mc.fillStyle='#657d6d';mc.fillRect(90,85,11,7);mc.fillRect(179,85,11,7);mc.fillStyle=s.boss.state==='dead'?'#96c7b4':'#684c35';mc.fillRect(246,120,6,35);
+  const area=Math.min(3,s.area),r=rooms[area],local=area===0?s.p.x/1900:area===1?(s.p.x-1900)/2000:area===2?(s.p.x-3900)/2100:(s.p.x-4100)/1900;
+  mc.fillStyle='#83ece0';mc.beginPath();mc.arc(r.x+7+Math.max(0,Math.min(1,local))*64,r.y+42-(area<3?Math.min(25,(620-s.p.y)*.1):0),5,0,Math.PI*2);mc.fill();
+  mc.fillStyle='#b84c4e';for(const [i,b] of [[2,s.boss],[3,s.boitata]])if(b&&b.state!=='dead'){mc.beginPath();mc.arc(rooms[i].x+38,rooms[i].y+44,5,0,Math.PI*2);mc.fill();}
+  mc.font='12px Georgia';mc.fillStyle='#bca77c';mc.textAlign='center';mc.fillText('RATANABÁ · ↓ VALE DAS CINZAS',140,250);
  }
  function sync(dt=0){const g=game();if(!g)return;const s=g.state;document.body.classList.toggle('playing',s.running);if(active&&(!s.running||s.cinematic?.id!==active))endScene();document.body.classList.toggle('cinematic',!!s.cinematic);$('#cutscene').hidden=!active;$('#cinemaBars').hidden=!active;
   $('#orbFill').style.height=Math.max(0,s.hp/s.maxHp)*100+'%';$('#potionCount').textContent=s.potions;$('#elementName').textContent=['FOGO','ELETRICIDADE','ÁGUA','VENENO'][s.element];$('#spellCooldown').textContent=s.p.spellCd>0?s.p.spellCd.toFixed(1):'';

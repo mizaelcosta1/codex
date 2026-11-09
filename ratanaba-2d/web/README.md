@@ -1,3 +1,7 @@
+# Versão 0.7 — descida ao Vale das Cinzas
+
+Depois do Curupira, siga à direita e desça pelas raízes. ↓/S + PULO atravessa plataformas; por toque, segure ↓ e toque PULO. Saltos permitem subir de volta. Use E/↓ no altar inferior e continue até Boitatá. Os fundos têm mistura espacial e temporal, sem troca direta por índice de área. A câmera acompanha a altura do jogador.
+
 # Versão web 0.5 — RPG, mochila, aura e animações
 
 Abra **web/index.html** após extrair a pasta inteira. **B** abre a mochila; **N** abre a evolução de aura nos altares. Manual e probabilidades em `docs/CHANGELOG_0.5.md`.
@@ -30,7 +34,7 @@ Este cliente Canvas/HTML usa os mesmos quatro atlas originais do projeto Godot e
 
 1. Cripta do Nome Apagado: penitentes, plataformas, altar e relicário no alto.
 2. Claustro das Águas Mortas: bestas de raízes, abismo e quatro selos. Golpeie cada selo com seu elemento; eles abrem o portão da floresta.
-3. Floresta Invertida: sentinelas, altar anterior à arena e Curupira. Ao iniciar a luta, uma barreira impede recuar ao altar. Observe antecipação da investida, raízes e eco da posição. Abaixo de meia vida ele acelera. Sua derrota concede esquiva aérea. O arco final conclui a vigília; voltar à Cripta permite abrir o relicário.
+3. Floresta Invertida: sentinelas, altar anterior à arena e Curupira. Ao iniciar a luta, uma barreira impede recuar ao altar. Observe antecipação da investida, raízes e eco da posição. Abaixo de meia vida ele acelera. Sua derrota abre a descida ao Vale das Cinzas (a esquiva aérea já está disponível). A vigília continua contra Boitatá; voltar à Cripta permite abrir o relicário.
 
 Essência e reagentes vêm de monstros. Aprimorar no altar exige 12 essências e dois reagentes do elemento equipado. Repousar restaura vida/curas e repovoa monstros comuns. Uma morte deixa um rastro com a essência; uma segunda morte o substitui. A progressão é persistida em localStorage na chave `ratanaba_web_v02`; este save é separado do Godot.
 

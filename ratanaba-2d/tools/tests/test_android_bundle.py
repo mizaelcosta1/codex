@@ -18,7 +18,7 @@ class AndroidBundleTests(unittest.TestCase):
             root = Path(directory)
             manifest, injected = build.prepare_bundle(root)
             self.assertFalse(injected)
-            for name in ['web/elemental.js', 'assets/chest_rarities.svg']:
+            for name in ['web/elemental.js', 'web/world.js', 'assets/chest_rarities.svg']:
                 self.assertIn('ratanaba/' + name, manifest)
             for source in (root / 'ratanaba/web').glob('*.js'):
                 # Static image/audio paths are not included in the HTML/CSS scan.
