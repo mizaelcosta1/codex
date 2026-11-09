@@ -9,7 +9,7 @@
    ['O BANIDO','Se ainda escutam meu rastro, eu os encontrarei.\nMesmo que só reste a misericórdia.','banido']
   ],
   tutorial_controls:[
-   ['O BANIDO','MOVIMENTO — use o analógico à esquerda para caminhar em qualquer direção. No teclado, use A/D ou as setas.','banido'],
+   ['O BANIDO','MOVIMENTO — deslize o analógico à esquerda para caminhar. Incline para cima para saltar; incline para baixo sobre uma plataforma para atravessá-la. No teclado, use A/D ou as setas.','banido'],
    ['O BANIDO','TRAVESSIA — toque em PULO para saltar. Durante o salto, use ESQUIVA para executar um dash aéreo e alcançar plataformas distantes.','banido'],
    ['O BANIDO','COMBATE — toque em GOLPE para atacar; segure para o golpe pesado. Use MAGIA e escolha um elemento que explore a fraqueza do inimigo.','banido'],
    ['O BANIDO','DEFESA — mantenha DEFESA para reduzir o dano. Pressione no instante do impacto para executar um PARRY e atordoar o atacante. Agora, siga os rastros.','banido']
