@@ -7,7 +7,7 @@ on:
       - 'ratanaba-2d/**'
       - '.github/workflows/ratanaba-2d-android.yml'
   push:
-    branches: [main, feature/ratanaba-2d-rpg-android]
+    branches: [main, feature/ratanaba-2d-rpg-android, feature/ratanaba-v0.7.0-video-audit]
     paths:
       - 'ratanaba-2d/**'
       - '.github/workflows/ratanaba-2d-android.yml'
@@ -20,17 +20,18 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: '22'
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
       - name: Unit and deterministic engine tests
         working-directory: ratanaba-2d
         run: |
+          node web/tests/test_engine_regressions.cjs
           node web/tests/test_elemental_unit.cjs
           node web/tests/preflight.cjs
           node web/tests/test_engine_regressions.cjs
