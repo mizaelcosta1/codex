@@ -15,7 +15,7 @@ O aplicativo Android offline empacota estes mesmos arquivos em uma WebView. Inst
 Os testes de navegador estão em web/tests. Requerem Playwright/Chromium apenas no desenvolvimento; não são dependências do jogo. Os testes unitários podem ser executados com Node sem instalar pacotes:
 
 ```sh
-node web/tests/preflight.cjs
+node web/tests/test_engine_regressions.cjs\nnode web/tests/preflight.cjs
 node web/tests/test_rpg_unit.cjs
 node web/tests/test_animation_unit.cjs
 ```
