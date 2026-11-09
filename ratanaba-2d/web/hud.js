@@ -8,6 +8,12 @@
    ['O BANIDO','Eu tomei a corrupção para mim…\ne deixei meus irmãos guardando um trono vazio.','banido'],
    ['O BANIDO','Se ainda escutam meu rastro, eu os encontrarei.\nMesmo que só reste a misericórdia.','banido']
   ],
+  tutorial_controls:[
+   ['O BANIDO','MOVIMENTO — use o analógico à esquerda para caminhar em qualquer direção. No teclado, use A/D ou as setas.','banido'],
+   ['O BANIDO','TRAVESSIA — toque em PULO para saltar. Durante o salto, use ESQUIVA para executar um dash aéreo e alcançar plataformas distantes.','banido'],
+   ['O BANIDO','COMBATE — toque em GOLPE para atacar; segure para o golpe pesado. Use MAGIA e escolha um elemento que explore a fraqueza do inimigo.','banido'],
+   ['O BANIDO','DEFESA — mantenha DEFESA para reduzir o dano. Pressione no instante do impacto para executar um PARRY e atordoar o atacante. Agora, siga os rastros.','banido']
+  ],
   curupira_intro:[
    ['CURUPIRA','Teus passos… Não. Este caminho já aconteceu.\nPor que o ontem não me devolve teu rosto?','curupira'],
    ['CURUPIRA','Se eu apagar teu rastro… talvez o tempo recomece.\nPerdoa-me, meu amigo.','curupira']
@@ -19,7 +25,7 @@
   ]
  };
  let seen=new Set(),active=null,line=0,shown=0,typeTime=0,last=performance.now(),focusBefore=null;
- function endScene(){const g=game();if(g)g.state.cinematic=null;active=null;$('#cutscene').hidden=true;$('#cinemaBars').hidden=true;document.body.classList.remove('cinematic');if(g){g.keys.clear();g.pressed.clear();}if(focusBefore?.isConnected)focusBefore.focus({preventScroll:true});}
+ function endScene(){const g=game(),ended=active;if(g)g.state.cinematic=null;active=null;$('#cutscene').hidden=true;$('#cinemaBars').hidden=true;document.body.classList.remove('cinematic');if(g){g.keys.clear();g.pressed.clear();}if(focusBefore?.isConnected)focusBefore.focus({preventScroll:true});if(ended==='awakening'&&g?.state.running)playScene('tutorial_controls');}
  function showLine(){const [name,text,portrait]=SCENES[active][line];shown=0;typeTime=0;$('#speakerName').textContent=name;$('#speakerPortrait').src='../assets/hud_v04/portrait_'+portrait+'.webp';$('#speakerPortrait').alt='Retrato de '+name;$('#dialogueText').textContent='';$('#dialogueCount').textContent=(line+1)+' / '+SCENES[active].length;$('#dialogueNext').innerHTML='REVELAR <span>↵</span>';const s=game().state;s.cinematic={id:active,line};}
  function playScene(id){const g=game();if(!SCENES[id]||!g?.state.running||seen.has(id)||active)return false;seen.add(id);active=id;line=0;focusBefore=document.activeElement;g.keys.clear();g.pressed.clear();g.state.p.vx=0;g.state.p.attack=null;g.state.p.queue=false;$('#cutscene').hidden=false;$('#cinemaBars').hidden=false;document.body.classList.add('cinematic');showLine();$('#dialogueNext').focus({preventScroll:true});return true;}
  function advance(){if(!active||game().state.paused||game().state.uiBlocked)return;const text=SCENES[active][line][1];if(shown<text.length){shown=text.length;$('#dialogueText').textContent=text;$('#dialogueNext').innerHTML=(line===SCENES[active].length-1?'RETOMAR':'CONTINUAR')+' <span>↵</span>';return;}line++;if(line>=SCENES[active].length)endScene();else showLine();}
