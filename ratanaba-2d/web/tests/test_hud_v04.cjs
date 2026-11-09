@@ -18,20 +18,20 @@ const {chromium}=require('playwright'),fs=require('fs'),path=require('path');
  await page.screenshot({path:path.join(out,'v04_cutscene.png')});
  await page.keyboard.press('Enter');check(await page.locator('#dialogueCount').textContent()==='2 / 3','Enter advances to the next line');
  await page.keyboard.press('Escape');check(await page.locator('#pauseMenu').isVisible(),'Escape pauses during a cut-scene');await page.click('#resume');
- await page.click('#dialogueSkip');await step(.02);
- check(await page.locator('#cutscene').isHidden()&&!await page.evaluate(()=>!!Ratanaba.state.cinematic),'Skip closes dialogue and clears cinematic state');
+ await page.click('#dialogueSkip');check(await page.evaluate(()=>Ratanaba.state.cinematic?.id==='tutorial_controls'),'Opening narrative is followed by the interactive controls tutorial');await page.click('#dialogueSkip');await step(.02);
+ check(await page.locator('#cutscene').isHidden()&&!await page.evaluate(()=>!!Ratanaba.state.cinematic),'Tutorial can be dismissed and clears cinematic state');
  check(await page.evaluate(()=>Ratanaba.keys.size===0&&Ratanaba.pressed.size===0),'Cut-scene clears buffered movement and attacks');
  await page.waitForFunction(()=>document.body.classList.contains('playing'));
  check(await page.locator('.vitals-frame').evaluate(i=>i.complete&&i.naturalWidth===730),'Gothic vitals frame is the actual extracted artwork');
- check(await page.locator('#touch').isVisible(),'Reference directional pad and action buttons visible');
+ check(await page.locator('#moveStick').isVisible(),'Virtual analog stick and action buttons visible');
  check(await page.locator('#elements button img').count()===4,'Four framed elemental assets are in the functional HUD');
  // Browser hit testing catches misplaced controls and guard/action overlaps.
  for(const viewport of [{width:1280,height:720},{width:844,height:390},{width:390,height:844}]){
   await page.setViewportSize(viewport);
   // Trial clicks wait for the browser's painted hit-test tree after resize.
-  for(const selector of ['.orb-heal','.pad-left','.pad-right','.pad-up','.pad-down','#clubButton','.action-jump','.action-dodge','.action-magic','.action-guard'])await page.locator(selector).click({trial:true});
+  for(const selector of ['.orb-heal','.stick-interact','#clubButton','.action-jump','.action-dodge','.action-magic','.action-guard'])await page.locator(selector).click({trial:true});
   const geometry=await page.evaluate(()=>{
-   const selectors=['.orb-heal','.pad-left','.pad-right','.pad-up','.pad-down','#clubButton','.action-jump','.action-dodge','.action-magic','.action-guard'];
+   const selectors=['.orb-heal','.stick-interact','#clubButton','.action-jump','.action-dodge','.action-magic','.action-guard'];
    const buttons=selectors.map(s=>document.querySelector(s));
    const stage=document.querySelector('#stage').getBoundingClientRect();
    const targets=buttons.map((b,i)=>{
@@ -55,8 +55,8 @@ const {chromium}=require('playwright'),fs=require('fs'),path=require('path');
  check(await page.locator('#essence').textContent()==='17','Small orb displays actual essence');
  await page.click('.orb-heal');await step(.02);check(await page.evaluate(()=>Ratanaba.state.hp===110&&Ratanaba.state.potions===2),'Potion orb heals and consumes a real charge');
  await page.click('[data-element="3"]');await step(.01);check(await page.evaluate(()=>Ratanaba.state.element===3)&&await page.locator('#elementName').textContent()==='VENENO','Element buttons select the actual weapon imbue');
- const before=await page.evaluate(()=>Ratanaba.state.p.x);const pad=await page.locator('.pad-right').boundingBox();await page.mouse.move(pad.x+pad.width/2,pad.y+pad.height/2);await page.mouse.down();await step(.25);await page.mouse.up();
- check(await page.evaluate(x=>Ratanaba.state.p.x>x+25,before),'Directional pad moves the physical player');
+ const before=await page.evaluate(()=>Ratanaba.state.p.x);const pad=await page.locator('#moveStick').boundingBox();await page.mouse.move(pad.x+pad.width/2,pad.y+pad.height/2);await page.mouse.down();await page.mouse.move(pad.x+pad.width*.82,pad.y+pad.height/2,{steps:4});await step(.25);await page.mouse.up();
+ check(await page.evaluate(x=>Ratanaba.state.p.x>x+25,before),'Analog stick proportionally moves the physical player');
  // Pointer events with real browser capture are used for the attack modes.
  await page.click('#clubButton');await step(.03);check(await page.evaluate(()=>Ratanaba.state.p.attack?.kind==='light'),'Club tap triggers light attack');await step(.6);
  await page.evaluate(()=>{Ratanaba.state.p.stamina=100;Ratanaba.state.p.attack=null;});const box=await page.locator('#clubButton').boundingBox();await page.mouse.move(box.x+box.width/2,box.y+box.height/2);await page.mouse.down();await page.waitForTimeout(350);await step(.02);await page.mouse.up();
