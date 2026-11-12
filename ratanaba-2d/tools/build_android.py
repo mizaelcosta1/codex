@@ -6,8 +6,8 @@ from pathlib import Path
 import argparse, hashlib, json, os, re, shutil, subprocess, sys, zipfile
 
 ROOT=Path(__file__).resolve().parents[1]
-VERSION_NAME='0.6.1'
-VERSION_CODE=601
+VERSION_NAME='0.7.0'
+VERSION_CODE=700
 
 def run(args,**kwargs):
     result=subprocess.run([str(a) for a in args],text=True,capture_output=True,**kwargs)

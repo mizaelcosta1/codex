@@ -2,7 +2,7 @@
 const assert=require('node:assert/strict'),vm=require('node:vm'),fs=require('node:fs'),path=require('node:path');
 async function fixture(){
  const calls=[],gradient={addColorStop(){}},ctx=new Proxy({createLinearGradient:()=>gradient,createRadialGradient:()=>gradient,drawImage(...args){calls.push(args);}},{get:(o,k)=>o[k]||(()=>{})});
- const nodes=new Map(),node=s=>{if(!nodes.has(s))nodes.set(s,{getContext:()=>ctx,style:{},classList:{toggle(){},add(){}},checked:false,hidden:false});return nodes.get(s);};
+ const nodes=new Map(),node=s=>{if(!nodes.has(s))nodes.set(s,{getContext:()=>ctx,style:{},classList:{toggle(){},add(){}},checked:false,hidden:false,addEventListener(){},removeEventListener(){},setPointerCapture(){},releasePointerCapture(){},getBoundingClientRect(){return {left:0,top:0,width:200,height:200};}});return nodes.get(s);};
  const local=new Map(),context={console,Math,JSON,Map,Set,Promise,Error,document:{querySelector:node,querySelectorAll:()=>[],body:node('body')},matchMedia:()=>({matches:false}),addEventListener(){},requestAnimationFrame(){},localStorage:{getItem:k=>local.get(k),setItem:(k,v)=>local.set(k,v)},Image:class{constructor(){this.naturalWidth=800;this.naturalHeight=800;this.complete=true;}set src(s){this._src=s;Promise.resolve().then(()=>this.onload?.());}},Audio:class{play(){return Promise.resolve();}pause(){}},window:{}};
  vm.createContext(context);for(const file of ['elemental.js','game.js'])vm.runInContext(fs.readFileSync(path.join(__dirname,'..',file),'utf8'),context);
  await new Promise(resolve=>setImmediate(resolve));const g=context.window.Ratanaba;g.start();return {g,local,calls};
@@ -27,7 +27,10 @@ const tests={
   assert.doesNotThrow(()=>g.update(1/60));assert.equal(g.state.p.x,g.state.checkpoint.x);assert.equal(g.state.hazards.length,0);
  },
  'altar chests use the same camera coordinates as the world':async({g,calls})=>{
-  g.warp(4750);calls.length=0;g.render();const chest=calls.find(a=>a[0]._src?.endsWith('chest_rarities.svg')&&a[1]===256);assert(chest);assert.equal(chest[5],4750-42-g.state.cam);
+  g.warp(4750);calls.length=0;g.render();const chest=calls.find(a=>a[0]._src?.endsWith('chest_rarities.svg')&&a[1]===0);assert(chest);assert.equal(chest[5],458-42-g.state.cam);
+ },
+ 'Curupira victory unlocks and enters the hidden sanctuary':async({g})=>{
+  g.state.boss.state='dead';g.state.boss.hp=0;g.warp(5890);g.update(1/60);assert.equal(g.state.won,true);g.pressed.add('interact');g.update(1/60);assert.equal(g.state.area,3);assert.equal(g.state.p.x,6100);assert.equal(g.state.visited[3],true);assert.equal(g.state.checkpoint.x,6100);
  }
 };
 (async()=>{let failed=0;for(const [label,test] of Object.entries(tests)){try{await test(await fixture());console.log('PASS '+label);}catch(e){failed++;console.error('FAIL '+label+'\n'+e.stack);}}if(failed)process.exitCode=1;else console.log('RESULT '+JSON.stringify({passed:Object.keys(tests).length}));})();

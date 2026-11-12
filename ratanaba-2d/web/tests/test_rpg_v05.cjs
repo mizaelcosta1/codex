@@ -6,7 +6,7 @@ const {chromium}=require('playwright'),fs=require('fs'),path=require('path');
  await page.addInitScript(()=>{window.__ratanaba_test_manual=true});
  const step=t=>page.evaluate(t=>{for(let n=0;n<t;n+=1/60)Ratanaba.update(1/60);Ratanaba.render();RatanabaHUD.sync()},t);
  await page.goto('file://'+path.join(__dirname,'..','index.html'));await page.waitForFunction(()=>window.Ratanaba?.ready&&window.RatanabaRPG&&window.RatanabaAnimations?.loaded);
- await page.click('#start');await page.click('#dialogueSkip');await step(.02);
+ await page.click('#start');await page.click('#dialogueSkip');await page.click('#dialogueSkip');await step(.02);
  check(await page.evaluate(()=>Object.keys(RatanabaAnimations.status).length===4&&RatanabaAnimations.loaded),'All four new animation atlases loaded');
  check(await page.evaluate(()=>Ratanaba.state.rpg.inventory.length===3&&Ratanaba.state.rpg.maxMana===80),'New character starts with real backpack resources and 80 mana');
  await page.keyboard.press('KeyB');check(await page.locator('#rpgModal').isVisible()&&await page.evaluate(()=>Ratanaba.state.paused&&Ratanaba.state.uiBlocked),'B opens backpack and suspends combat');
