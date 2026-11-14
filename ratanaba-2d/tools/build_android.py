@@ -8,8 +8,8 @@ import argparse, hashlib, json, os, re, shutil, subprocess, sys, zipfile
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from world_integrity import verify_staging, verify_apk
-VERSION_NAME='0.8.0'
-VERSION_CODE=800
+VERSION_NAME='0.8.1'
+VERSION_CODE=801
 
 def run(args,**kwargs):
     result=subprocess.run([str(a) for a in args],text=True,capture_output=True,**kwargs)
