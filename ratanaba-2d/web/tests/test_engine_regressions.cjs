@@ -31,5 +31,14 @@ const tests={
  }
  , 'analog input moves proportionally and keyboard still works':async({g})=>{g.state.p.inputX=.6;g.update(1/60);assert(g.state.p.vx>0);g.state.p.inputX=0;g.keys.add('left');g.update(1/60);assert(g.state.p.vx<140);g.keys.delete('left');},
  'down plus jump drops through thin platforms but not solid floor':async({g})=>{g.warp(810,405);g.state.p.ground=true;g.state.p.inv=99;g.keys.add('down');g.pressed.add('jump');g.update(1/60);assert(g.state.p.y>405);assert(g.state.p.dropThrough>0);g.keys.delete('down');for(let i=0;i<100;i++)g.update(1/60);assert.equal(g.state.p.y,620);assert(g.state.p.ground);}
+
+ , 'continuing from the lower altar restores player height, area and camera':async({g,local})=>{
+  g.state.boss.state='dead';g.state.boss.hp=0;g.state.checkpoint={x:6650,y:990};g.state.visited[3]=true;g.persist();
+  assert.equal(g.restore(),true);assert.equal(g.state.p.x,6650);assert.equal(g.state.p.y,990);assert.equal(g.state.area,3);assert(g.state.cameraY>0);assert(g.state.visited[3]);
+ },
+ 'legacy Curupira-only save remains loadable and keeps the upper route':async({g,local})=>{
+  local.set('ratanaba_web_v02',JSON.stringify({saveVersion:2,bossDead:true,checkpoint:{x:4750,y:620},seals:[true,true,true,true]}));
+  assert.equal(g.restore(),true);assert.equal(g.state.boss.state,'dead');assert.equal(g.state.boitata.state,'dormant');assert.equal(g.state.p.x,4750);assert.equal(g.state.p.y,620);assert.equal(g.state.area,2);
+ }
 };
 (async()=>{let failed=0;for(const [label,test] of Object.entries(tests)){try{await test(await fixture());console.log('PASS '+label);}catch(e){failed++;console.error('FAIL '+label+'\n'+e.stack);}}if(failed)process.exitCode=1;else console.log('RESULT '+JSON.stringify({passed:Object.keys(tests).length}));})();
