@@ -27,10 +27,9 @@ const tests={
   assert.doesNotThrow(()=>g.update(1/60));assert.equal(g.state.p.x,g.state.checkpoint.x);assert.equal(g.state.hazards.length,0);
  },
  'altar chests use the same camera coordinates as the world':async({g,calls})=>{
-  g.warp(4750);calls.length=0;g.render();const chest=calls.find(a=>a[0]._src?.endsWith('chest_rarities.svg')&&a[1]===0);assert(chest);assert.equal(chest[5],458-42-g.state.cam);
- },
- 'Curupira victory unlocks and enters the hidden sanctuary':async({g})=>{
-  g.state.boss.state='dead';g.state.boss.hp=0;g.warp(5890);g.update(1/60);assert.equal(g.state.won,true);g.pressed.add('interact');g.update(1/60);assert.equal(g.state.area,3);assert.equal(g.state.p.x,6100);assert.equal(g.state.visited[3],true);assert.equal(g.state.checkpoint.x,6100);
+  g.warp(4750);calls.length=0;g.render();const chests=calls.filter(a=>a[0]._src?.endsWith('chest_rarities.svg'));assert.equal(chests.length,5);for(const [i,x] of [458,740,1080,2850,4150].entries()){const chest=chests.find(a=>a[1]===i*128);assert(chest,'rarity '+i);assert.equal(chest[5],x-42-g.state.cam);}
  }
+ , 'analog input moves proportionally and keyboard still works':async({g})=>{g.state.p.inputX=.6;g.update(1/60);assert(g.state.p.vx>0);g.state.p.inputX=0;g.keys.add('left');g.update(1/60);assert(g.state.p.vx<140);g.keys.delete('left');},
+ 'down plus jump drops through thin platforms but not solid floor':async({g})=>{g.warp(810,405);g.state.p.ground=true;g.state.p.inv=99;g.keys.add('down');g.pressed.add('jump');g.update(1/60);assert(g.state.p.y>405);assert(g.state.p.dropThrough>0);g.keys.delete('down');for(let i=0;i<100;i++)g.update(1/60);assert.equal(g.state.p.y,620);assert(g.state.p.ground);}
 };
 (async()=>{let failed=0;for(const [label,test] of Object.entries(tests)){try{await test(await fixture());console.log('PASS '+label);}catch(e){failed++;console.error('FAIL '+label+'\n'+e.stack);}}if(failed)process.exitCode=1;else console.log('RESULT '+JSON.stringify({passed:Object.keys(tests).length}));})();

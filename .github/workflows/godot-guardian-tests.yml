@@ -12,6 +12,7 @@ on:
       - 'assets/guardians/**'
       - 'tests/**'
       - 'project.godot'
+      - 'assets/video/**'
   pull_request:
     paths:
       - '.github/workflows/godot-guardian-tests.yml'
@@ -47,6 +48,8 @@ jobs:
         run: Godot_v4.6.3-stable_linux.x86_64 --headless --path . --script res://tests/test_guardian_asset_catalog.gd
       - name: Check five guardian models and animations
         run: Godot_v4.6.3-stable_linux.x86_64 --headless --path . --script res://tests/test_guardian_showcase.gd
+      - name: Validate video loading screen
+        run: Godot_v4.6.3-stable_linux.x86_64 --headless --path . --script res://tests/test_loading_screen.gd
       - name: Run original gameplay regression suite
         run: Godot_v4.6.3-stable_linux.x86_64 --headless --path . --fixed-fps 60 --script res://tests/test_game.gd
       - name: Upload diagnostic reports

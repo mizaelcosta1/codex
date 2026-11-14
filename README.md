@@ -17,7 +17,7 @@ Controle o Curupira, conheça Saci e Iara, restaure três santuários, escape do
 Boitatá e derrote a Cuca. Há combate, cura, coleta, vitória, derrota, nova
 partida, pausa, áudio e melhor tempo salvo no aparelho.
 
-![Cena jogável](docs/images/gameplay.png)
+
 
 **Arte inicial:** os modelos são simplificados, com rigs por segmentos e materiais
 básicos. Ainda não têm o acabamento fotorealista das imagens de conceito da

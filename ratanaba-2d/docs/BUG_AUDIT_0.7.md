@@ -1,5 +1,7 @@
 # Auditoria de gameplay v0.7.0 — evidências do vídeo Android
 
+**Nota de integração (14/11/2026):** este documento descreve a proposta histórica da branch. O portal para o Santuário Oculto foi substituído pelo percurso jogável para o Vale das Brasas já incorporado à branch principal; os demais aprimoramentos da auditoria foram preservados na resolução do PR #5.
+
 ## Fonte visual
 Vídeo enviado pelo usuário: gravação vertical de aproximadamente 226,6 s, 720x1612, 30,6 fps de captura. A gravação mostra o menu, três biomas, inimigos comuns, selos elementais, combate com Curupira, inventário e tela de encerramento da primeira vigília.
 

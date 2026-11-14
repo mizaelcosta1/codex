@@ -8,6 +8,10 @@ on:
     paths:
       - '.github/workflows/android-preview-apk.yml'
       - 'export_presets.cfg'
+      - 'assets/video/**'
+      - 'scripts/loading_screen.gd'
+      - 'scenes/loading.tscn'
+      - 'tests/test_loading_screen.gd'
 
 permissions:
   contents: write
@@ -87,6 +91,7 @@ jobs:
           set -euo pipefail
           Godot_v$GODOT_VERSION-stable_linux.x86_64 --headless --path . --script res://tests/test_guardian_asset_catalog.gd
           Godot_v$GODOT_VERSION-stable_linux.x86_64 --headless --path . --script res://tests/test_guardian_showcase.gd
+          Godot_v$GODOT_VERSION-stable_linux.x86_64 --headless --path . --script res://tests/test_loading_screen.gd
           Godot_v$GODOT_VERSION-stable_linux.x86_64 --headless --path . --fixed-fps 60 --script res://tests/test_game.gd
       - name: Export Android debug APK
         shell: bash
