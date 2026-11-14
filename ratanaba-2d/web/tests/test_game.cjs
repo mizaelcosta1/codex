@@ -10,7 +10,7 @@ const fs=require('fs'),path=require('path');
  function check(ok,label){checks.push({label,passed:!!ok});console.log((ok?'PASS ':'FAIL ')+label);if(!ok)throw new Error(label);}
  await page.addInitScript(()=>{window.__ratanaba_test_manual=true;});
  async function advance(ms){await page.evaluate(ms=>{for(let t=0;t<ms/1000;t+=1/60)Ratanaba.update(1/60);Ratanaba.render();},ms);}
- async function skipScene(){if(await page.locator('#dialogueSkip').isVisible())await page.click('#dialogueSkip');}
+ async function skipScene(){for(let i=0;i<3&&await page.locator('#dialogueSkip').isVisible();i++)await page.click('#dialogueSkip');}
  const url='file://'+path.join(__dirname,'..','index.html');await page.goto(url);await page.waitForFunction(()=>window.Ratanaba&&Ratanaba.ready,{timeout:60000});await page.screenshot({path:path.join(out,'01_title.png')});
  check(await page.evaluate(()=>Object.values(Ratanaba.assets).every(i=>i.complete&&i.naturalWidth>0)),'all four generated atlases loaded');
  await page.click('#start');await skipScene();await advance(200);

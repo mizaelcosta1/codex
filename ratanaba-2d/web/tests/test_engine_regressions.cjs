@@ -2,7 +2,7 @@
 const assert=require('node:assert/strict'),vm=require('node:vm'),fs=require('node:fs'),path=require('node:path');
 async function fixture(){
  const calls=[],gradient={addColorStop(){}},ctx=new Proxy({createLinearGradient:()=>gradient,createRadialGradient:()=>gradient,drawImage(...args){calls.push(args);}},{get:(o,k)=>o[k]||(()=>{})});
- const nodes=new Map(),node=s=>{if(!nodes.has(s))nodes.set(s,{getContext:()=>ctx,style:{},classList:{toggle(){},add(){}},checked:false,hidden:false});return nodes.get(s);};
+ const nodes=new Map(),node=s=>{if(!nodes.has(s))nodes.set(s,{getContext:()=>ctx,style:{},classList:{toggle(){},add(){}},checked:false,hidden:false,addEventListener(){},removeEventListener(){},setPointerCapture(){},releasePointerCapture(){},getBoundingClientRect(){return {left:0,top:0,width:200,height:200};}});return nodes.get(s);};
  const local=new Map(),context={console,Math,JSON,Map,Set,Promise,Error,document:{querySelector:node,querySelectorAll:()=>[],body:node('body')},matchMedia:()=>({matches:false}),addEventListener(){},requestAnimationFrame(){},localStorage:{getItem:k=>local.get(k),setItem:(k,v)=>local.set(k,v)},Image:class{constructor(){this.naturalWidth=800;this.naturalHeight=800;this.complete=true;}set src(s){this._src=s;Promise.resolve().then(()=>this.onload?.());}},Audio:class{play(){return Promise.resolve();}pause(){}},window:{}};
  vm.createContext(context);for(const file of ['elemental.js','game.js'])vm.runInContext(fs.readFileSync(path.join(__dirname,'..',file),'utf8'),context);
  await new Promise(resolve=>setImmediate(resolve));const g=context.window.Ratanaba;g.start();return {g,local,calls};
@@ -27,7 +27,9 @@ const tests={
   assert.doesNotThrow(()=>g.update(1/60));assert.equal(g.state.p.x,g.state.checkpoint.x);assert.equal(g.state.hazards.length,0);
  },
  'altar chests use the same camera coordinates as the world':async({g,calls})=>{
-  g.warp(4750);calls.length=0;g.render();const chest=calls.find(a=>a[0]._src?.endsWith('chest_rarities.svg')&&a[1]===256);assert(chest);assert.equal(chest[5],4750-42-g.state.cam);
+  g.warp(4750);calls.length=0;g.render();const chests=calls.filter(a=>a[0]._src?.endsWith('chest_rarities.svg'));assert.equal(chests.length,5);for(const [i,x] of [458,740,1080,2850,4150].entries()){const chest=chests.find(a=>a[1]===i*128);assert(chest,'rarity '+i);assert.equal(chest[5],x-42-g.state.cam);}
  }
+ , 'analog input moves proportionally and keyboard still works':async({g})=>{g.state.p.inputX=.6;g.update(1/60);assert(g.state.p.vx>0);g.state.p.inputX=0;g.keys.add('left');g.update(1/60);assert(g.state.p.vx<140);g.keys.delete('left');},
+ 'down plus jump drops through thin platforms but not solid floor':async({g})=>{g.warp(810,405);g.state.p.ground=true;g.state.p.inv=99;g.keys.add('down');g.pressed.add('jump');g.update(1/60);assert(g.state.p.y>405);assert(g.state.p.dropThrough>0);g.keys.delete('down');for(let i=0;i<100;i++)g.update(1/60);assert.equal(g.state.p.y,620);assert(g.state.p.ground);}
 };
 (async()=>{let failed=0;for(const [label,test] of Object.entries(tests)){try{await test(await fixture());console.log('PASS '+label);}catch(e){failed++;console.error('FAIL '+label+'\n'+e.stack);}}if(failed)process.exitCode=1;else console.log('RESULT '+JSON.stringify({passed:Object.keys(tests).length}));})();

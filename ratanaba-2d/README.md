@@ -1,6 +1,6 @@
 # Ratanabá Guardians — Crônicas do Exílio 2D
 
-Cliente 2D RPG/metroidvania 0.5 com três áreas, oito inimigos comuns, Curupira, combate, quatro elementos, mochila, raridades, mana e evolução por aura. Este projeto está separado do protótipo Godot 3D na raiz do repositório.
+Cliente 2D RPG/metroidvania 0.7.0 com quatro áreas, onze inimigos comuns, Curupira e Boi-Tatá, combate, quatro elementos, mochila, raridades, mana e evolução por aura. Este projeto está separado do protótipo Godot 3D na raiz do repositório.
 
 ## Expansão em desenvolvimento: Vale das Brasas
 
@@ -12,7 +12,7 @@ Validação determinística dedicada: `node web/tests/test_vale_das_brasas.cjs`.
 
 ## Jogar no navegador
 
-Abra `web/index.html` mantendo a pasta assets no lugar, ou rode `python3 -m http.server 8000` nesta pasta e acesse `/web/`. Sem dependências JavaScript externas em execução. B abre a mochila; N abre aura; U conjura magia; J/L atacam; K esquiva; Espaço pula.
+Abra `web/index.html` mantendo a pasta assets no lugar, ou rode `python3 -m http.server 8000` nesta pasta e acesse `/web/`. Sem dependências JavaScript externas em execução. B abre a mochila; N abre aura; U conjura magia; J/L atacam; K esquiva; Espaço pula. No celular, use o analógico virtual; para atravessar plataformas finas, ↓/S + PULO no teclado.
 
 ## Android
 
@@ -23,6 +23,8 @@ O aplicativo Android offline empacota estes mesmos arquivos em uma WebView. Inst
 Os testes de navegador estão em web/tests. Requerem Playwright/Chromium apenas no desenvolvimento; não são dependências do jogo. Os testes unitários podem ser executados com Node sem instalar pacotes:
 
 ```sh
+node web/tests/test_engine_regressions.cjs
+node web/tests/test_vale_das_brasas.cjs
 node web/tests/preflight.cjs
 node web/tests/test_rpg_unit.cjs
 node web/tests/test_animation_unit.cjs
