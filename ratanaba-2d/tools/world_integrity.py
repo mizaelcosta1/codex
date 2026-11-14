@@ -23,7 +23,7 @@ REQUIRED_LOGIC = (
     'function boitataUpdate(dt)', 'function defeatBoss()',
     'function defeatBoitata()', 'function drawValeEnemy',
     'state.cameraY', 'boitataDead:', 'bossDead:',
-    "e.type===3", "e.type===4",
+    "e.type===3", "i%2?4:3",
     'function drawValeAtmosphere(',
 )
 
