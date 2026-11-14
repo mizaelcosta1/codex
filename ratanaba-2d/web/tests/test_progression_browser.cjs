@@ -24,7 +24,9 @@ const {chromium}=require('playwright'),fs=require('node:fs'),path=require('node:
  await page.screenshot({path:path.join(out,'v07_descent.png')});
  async function drop(){await page.keyboard.down('ArrowDown');await page.keyboard.press('Space');await page.keyboard.up('ArrowDown');await step(1.1);}
  for(let i=0;i<8&&await page.evaluate(()=>Ratanaba.state.p.y<1580);i++)await drop();
- check(await page.evaluate(()=>Ratanaba.state.p.ground&&Ratanaba.state.p.y===1580&&!Ratanaba.state.won),'The descent lands on the lower checkpoint terrace');
+ const landing=await page.evaluate(()=>({x:Ratanaba.state.p.x,y:Ratanaba.state.p.y,vx:Ratanaba.state.p.vx,vy:Ratanaba.state.p.vy,ground:Ratanaba.state.p.ground,drop:Ratanaba.state.p.drop,area:Ratanaba.state.area,checkpoint:Ratanaba.state.checkpoint,won:Ratanaba.state.won}));
+ console.log('TRACE lower terrace landing: '+JSON.stringify(landing));
+ check(landing.ground&&landing.y===1580&&!landing.won,'The descent lands on the lower checkpoint terrace; '+JSON.stringify(landing));
  // Stop at the altar with ordinary horizontal input.
  await page.keyboard.down('ArrowLeft');await step(1.7);await page.keyboard.up('ArrowLeft');await step(.2);await page.keyboard.press('KeyE');await step(.03);
  check(await page.evaluate(()=>Ratanaba.state.checkpoint.y===1580),'The lower altar can be activated by normal interaction');
