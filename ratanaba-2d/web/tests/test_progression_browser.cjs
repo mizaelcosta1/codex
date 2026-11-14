@@ -22,7 +22,8 @@ const {chromium}=require('playwright'),fs=require('node:fs'),path=require('node:
  await page.keyboard.down('ArrowRight');await step(1.8);await page.keyboard.up('ArrowRight');await step(1.2);
  check(await page.evaluate(()=>Ratanaba.state.p.y>620&&Ratanaba.state.camY>0),'Walking off the opened shaft descends with a vertical camera');
  await page.screenshot({path:path.join(out,'v07_descent.png')});
- async function drop(){await page.keyboard.down('ArrowDown');await page.keyboard.press('Space');await page.keyboard.up('ArrowDown');await step(1.1);}
+ // Keep Down held until at least one manual physics frame consumes the buffered jump.
+ async function drop(){await page.keyboard.down('ArrowDown');await page.keyboard.press('Space');await step(1/60);await page.keyboard.up('ArrowDown');await step(1.1);}
  for(let i=0;i<8&&await page.evaluate(()=>Ratanaba.state.p.y<1580);i++)await drop();
  const landing=await page.evaluate(()=>({x:Ratanaba.state.p.x,y:Ratanaba.state.p.y,vx:Ratanaba.state.p.vx,vy:Ratanaba.state.p.vy,ground:Ratanaba.state.p.ground,drop:Ratanaba.state.p.drop,area:Ratanaba.state.area,checkpoint:Ratanaba.state.checkpoint,won:Ratanaba.state.won}));
  console.log('TRACE lower terrace landing: '+JSON.stringify(landing));
