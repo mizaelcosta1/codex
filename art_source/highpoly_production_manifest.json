@@ -1,0 +1,61 @@
+{
+  "version": "0.1",
+  "date": "2026-11-07",
+  "environment": "Higgsfield 3D Jutsu - remote Blender 5.2",
+  "cost_paid_credits": 0,
+  "engine_target": "Godot 4.6.3",
+  "platform_target": "Android",
+  "status": "highpoly_work_started_not_game_ready",
+  "characters": [
+    {
+      "id": "banido",
+      "canonical": true,
+      "stage": "highpoly_procedural_source_created",
+      "project_id": "318b9b01-24e7-49e4-ac06-6ee5748413a7",
+      "revision": 6,
+      "viewport_evaluated_triangles": 247392,
+      "viewport_evaluated_vertices": 124056,
+      "render_subdivision_levels": 3,
+      "materials": 12,
+      "glb_preview_size_bytes": 7215928,
+      "rig_source_preserved": true,
+      "procedural_materials": true,
+      "visual_review": "pending_human_review"
+    },
+    {
+      "id": "curupira",
+      "canonical": true,
+      "stage": "highpoly_procedural_source_created",
+      "project_id": "73f7d041-80b1-4444-85c0-55567356e6b7",
+      "revision": 1,
+      "viewport_evaluated_triangles": 452640,
+      "mesh_objects": 236,
+      "materials": 13,
+      "glb_preview_size_bytes": 9814924,
+      "rig_source_preserved": false,
+      "procedural_materials": true,
+      "visual_review": "pending_human_review"
+    },
+    {
+      "id": "boitata",
+      "canonical": true,
+      "stage": "pending_highpoly_sculpt"
+    },
+    {
+      "id": "mula_sem_cabeca",
+      "canonical": true,
+      "stage": "pending_highpoly_sculpt"
+    },
+    {
+      "id": "boto",
+      "canonical": true,
+      "stage": "pending_highpoly_sculpt"
+    },
+    {
+      "id": "matinta_pereira",
+      "canonical": true,
+      "stage": "pending_highpoly_sculpt"
+    }
+  ],
+  "asset_admission_policy": "Do not replace assets/guardians/*.glb until game-ready, skinned, PBR baked and Godot/Android verified."
+}

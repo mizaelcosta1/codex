@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "project": "Ratanabá Guardians: O Banido",
+  "canon": [
+    "banido",
+    "curupira",
+    "boitata",
+    "mula_sem_cabeca",
+    "boto",
+    "matinta_pereira"
+  ],
+  "model": "G1-Turbo",
+  "target_faces_for_source": 200000,
+  "pbr": true,
+  "outputs": [
+    "glb",
+    "zip"
+  ],
+  "android_texture_target": 2048,
+  "characters": {
+    "banido": {
+      "name": "O Banido",
+      "max_game_triangles": 45000,
+      "prompt": "Photorealistic dark fantasy Amazonian ancestral warrior, single male full body, tall muscular brown-skinned god with long black dreadlocks, weathered dark tribal full-length trousers, aged leather harness, carved wooden mace in right hand, cyan turquoise rune scars glowing across bare chest and arms, bronze amulets, realistic skin pores, fabric weave, anatomical proportions, neutral A pose, isolated on gray backdrop, no base."
+    },
+    "curupira": {
+      "name": "Curupira",
+      "max_game_triangles": 35000,
+      "prompt": "Photorealistic Amazonian forest spirit Curupira, athletic adult masculine, wild fiery red hair, mossy bark armor, sorrowful amber eyes, BOTH feet reversed anatomically with toes pointing toward the back, temporal root markings, neutral A pose, detailed brown skin and leaf material, isolated full body, gray background."
+    },
+    "boitata": {
+      "name": "Boitatá",
+      "max_game_triangles": 45000,
+      "prompt": "Photorealistic huge black obsidian serpent, full body including tapering tail in open S-shape, glowing cold BLUE psychic fire fissures and crystalline scales, blind white eyes, dark fantasy Brazilian folklore, anatomically coherent snake, razor fangs, detailed scales, neutral gray background, one creature only, not orange fire."
+    },
+    "mula_sem_cabeca": {
+      "name": "Mula sem Cabeça",
+      "max_game_triangles": 45000,
+      "prompt": "Photorealistic colossal headless armored horse from Brazilian folklore, absolutely NO HEAD, supernatural blue flame erupting upward from neck opening, charcoal hide, iron hooves, dark-bronze temple armor, realistic quadruped anatomy with all four legs, full body 3/4 view, gray background, one creature only."
+    },
+    "boto": {
+      "name": "Boto",
+      "max_game_triangles": 35000,
+      "prompt": "Photorealistic haunted Amazonian Boto river shapeshifter in elegant male human form, dark fantasy, tan skin, wet shoulder-length hair, pale ivory linen shirt, burgundy and indigo cloth, weathered gold talismans, subtle river-pink dolphin markings, dignified grief, neutral A-pose, isolated full body on gray background, no hat. Separate leviathan form later."
+    },
+    "matinta_pereira": {
+      "name": "Matinta Pereira",
+      "max_game_triangles": 40000,
+      "prompt": "Photorealistic elderly Amazonian spectral witch Matinta Pereira, deeply aged bronze skin, long white hair, solemn blank eyes, dark rags and oversized frayed black feather wings, carved wooden amulets, echo glyphs, detailed cloth and feather textures, lean natural proportions, full body standing A pose, plain gray background, one character only."
+    }
+  },
+  "global_negative": "duplicate bodies, disconnected parts, extreme anatomy, watermarks, title text, flat cartoon shading, excessive accessories, cropped hands or feet",
+  "policy": "Lux3D calls can consume provider credits. 60 Tripo credits do NOT authorize Lux3D usage. Keep default submit disabled."
+}

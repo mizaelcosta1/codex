@@ -1,0 +1,34 @@
+name: Ratanaba Studio integration checks
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/guardians-v0.2-asset-pipeline
+    paths:
+      - 'studio/**'
+      - '.github/workflows/studio-tools-tests.yml'
+  pull_request:
+    paths:
+      - 'studio/**'
+permissions:
+  contents: read
+jobs:
+  validate-studio:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate offline GLB inspector
+        run: node --test studio/tests/glb-inspector.test.cjs
+      - name: Check live-tool links and paid generation guard
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s studio/index.html
+          grep -q 'developer.puter.com/labs/blender-web/' studio/index.html
+          grep -q 'ComfyUI-Lux3D' studio/index.html
+          grep -q 'Ratanaba_Lux3D_Colab.ipynb' studio/index.html
+          grep -q 'APPROVE_PAID_LUX3D_REQUEST = False' notebooks/Ratanaba_Lux3D_Colab.ipynb

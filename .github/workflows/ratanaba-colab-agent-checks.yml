@@ -1,0 +1,23 @@
+name: Ratanaba Colab Agent checks
+on:
+  push:
+    branches: [feature/ratanaba-colab-agent]
+    paths:
+      - 'tools/ratanaba_colab_agent.py'
+      - 'tools/blender/banido_v003.py'
+      - 'tools/tests/test_ratanaba_colab_agent.py'
+      - 'tasks/colab/queue.json'
+      - '.github/workflows/ratanaba-colab-agent-checks.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  static_checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check Python syntax and queue safety
+        run: |
+          python3 -m py_compile tools/ratanaba_colab_agent.py tools/blender/banido_v003.py
+          python3 -m unittest discover -s tools/tests -p test_ratanaba_colab_agent.py -v

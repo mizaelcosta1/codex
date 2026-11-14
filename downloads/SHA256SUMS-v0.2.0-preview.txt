@@ -1,1 +1,1 @@
-e571316402dde7682fc4ae33423479d085b96b7e0f6a8f99205f4c5ad0824f59  build/guardioes-da-mata-v0.2.0-preview.apk
+d52c419582b5eb4183da755efd0b94271ffb511acfcd074d40c0faba75de6698  build/guardioes-da-mata-v0.2.0-preview.apk
