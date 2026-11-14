@@ -64,10 +64,13 @@ jobs:
       - name: Build and verify signed offline APK
         working-directory: ratanaba-2d
         run: python3 tools/build_android.py --sdk "$ANDROID_SDK_ROOT" --keystore "$RUNNER_TEMP/ratanaba-debug.jks"
+      - name: Validate packaged world content
+        working-directory: ratanaba-2d
+        run: python3 tools/world_integrity.py build/android/ratanaba-guardians-2d-v0.8.0-debug.apk
       - name: Upload installable development APK and validation
         uses: actions/upload-artifact@v4
         with:
-          name: ratanaba-guardians-2d-v0.7.0-android-debug
+          name: ratanaba-guardians-2d-v0.8.0-android-debug
           if-no-files-found: error
           retention-days: 30
           path: |
