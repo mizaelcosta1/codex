@@ -34,6 +34,7 @@ jobs:
           node web/tests/test_elemental_unit.cjs
           node web/tests/preflight.cjs
           node web/tests/test_engine_regressions.cjs
+          node web/tests/test_vale_das_brasas.cjs
           python3 -m unittest discover -s tools/tests -p 'test_*.py'
           node web/tests/test_rpg_unit.cjs
           node web/tests/test_animation_unit.cjs
