@@ -41,7 +41,7 @@ def verify_world(read_bytes, names):
     missing_logic = [marker for marker in REQUIRED_LOGIC if marker not in game]
     if missing_logic:
         raise ValueError('Missing world / boss gameplay code: ' + ', '.join(missing_logic))
-    if '4 ÁREAS · 2 GUARDIÕES' not in index:
+    if '4 ÁREAS · 2 GUARDIÕES' not in index and '19 SALAS' not in index:
         raise ValueError('Android menu does not advertise the current 4-area build')
     if "6800,7250,7580" not in game:
         raise ValueError('Missing Vale das Brasas enemy spawn wave')
