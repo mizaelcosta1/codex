@@ -1,6 +1,6 @@
 # Ratanabá Guardians — Crônicas do Exílio 2D
 
-Cliente 2D RPG/metroidvania 0.7.0 com quatro áreas, onze inimigos comuns, Curupira e Boi-Tatá, combate, quatro elementos, mochila, raridades, mana e evolução por aura. Este projeto está separado do protótipo Godot 3D na raiz do repositório.
+Cliente 2D RPG/metroidvania 0.8.0 com quatro áreas, onze inimigos comuns, Curupira e Boi-Tatá, combate, quatro elementos, mochila, raridades, mana e evolução por aura. Este projeto está separado do protótipo Godot 3D na raiz do repositório.
 
 ## Expansão em desenvolvimento: Vale das Brasas
 

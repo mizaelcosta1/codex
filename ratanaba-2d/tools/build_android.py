@@ -6,8 +6,10 @@ from pathlib import Path
 import argparse, hashlib, json, os, re, shutil, subprocess, sys, zipfile
 
 ROOT=Path(__file__).resolve().parents[1]
-VERSION_NAME='0.7.0'
-VERSION_CODE=700
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from world_integrity import verify_staging, verify_apk
+VERSION_NAME='0.8.0'
+VERSION_CODE=800
 
 def run(args,**kwargs):
     result=subprocess.run([str(a) for a in args],text=True,capture_output=True,**kwargs)
@@ -44,6 +46,7 @@ def prepare_bundle(asset_root):
             if reference.startswith(('#','data:','http')):continue
             target=(source.parent/reference).resolve()
             if not target.is_relative_to(bundle.resolve()) or not target.is_file():raise SystemExit('Unresolved bundled reference: '+str(source)+' '+reference)
+    world_report=verify_staging(bundle)
     manifest={str(f.relative_to(asset_root)):hashlib.sha256(f.read_bytes()).hexdigest() for f in sorted(bundle.rglob('*')) if f.is_file()}
     (asset_root/'bundle-manifest.json').write_text(json.dumps({'version':VERSION_NAME,'files':manifest,'native_bridge_injected':injected},indent=2)+'\n')
     return manifest,injected
@@ -97,7 +100,8 @@ def main():
         for filename,digest in manifest.items():assert hashlib.sha256(z.read('assets/'+filename)).hexdigest()==digest,filename
         assert b'RatanabaRPG' in z.read('assets/ratanaba/web/rpg.js')
         assert b'RatanabaAnimations' in z.read('assets/ratanaba/web/animations.js')
-    report={'package':'br.com.ratanaba.guardians2d','version_name':VERSION_NAME,'version_code':VERSION_CODE,'min_sdk':26,'target_sdk':35,'apk_bytes':out.stat().st_size,'sha256':hashlib.sha256(out.read_bytes()).hexdigest(),'asset_count':len(manifest),'checks':{'dex_magic':True,'zip_integrity':True,'signature_verified':True,'zip_alignment':True,'runtime_asset_hashes':True,'manifest_package_version_sdk':True,'no_internet_permission':True,'literal_html_css_dependencies':True},'signing':'Development debug certificate, not Play Store production signing','device_test':'Not run: no connected Android device/emulator available','native_bridge_injected':injected}
+    world_report=verify_apk(out)
+    report={'world_integrity':world_report,'package':'br.com.ratanaba.guardians2d','version_name':VERSION_NAME,'version_code':VERSION_CODE,'min_sdk':26,'target_sdk':35,'apk_bytes':out.stat().st_size,'sha256':hashlib.sha256(out.read_bytes()).hexdigest(),'asset_count':len(manifest),'checks':{'dex_magic':True,'zip_integrity':True,'signature_verified':True,'zip_alignment':True,'runtime_asset_hashes':True,'full_world_content':True,'manifest_package_version_sdk':True,'no_internet_permission':True,'literal_html_css_dependencies':True},'signing':'Development debug certificate, not Play Store production signing','device_test':'Not run: no connected Android device/emulator available','native_bridge_injected':injected}
     (build/'android_validation.json').write_text(json.dumps(report,indent=2)+'\n');(build/'SHA256SUMS.txt').write_text(report['sha256']+'  '+out.name+'\n')
     print(json.dumps(report,indent=2));print('APK='+str(out))
 
