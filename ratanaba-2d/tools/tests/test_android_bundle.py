@@ -26,6 +26,24 @@ class AndroidBundleTests(unittest.TestCase):
                     self.assertTrue((source.parent / reference).is_file(), f'{source.name}: {reference}')
             self.assertEqual(json.loads((root / 'bundle-manifest.json').read_text())['version'], build.VERSION_NAME)
 
+    def test_stale_three_area_runtime_is_rejected_even_when_assets_exist(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            build.prepare_bundle(root)
+            game = root / 'ratanaba/web/game.js'
+            game.write_text(game.read_text().replace("'Vale das Brasas'", "'Santuário Antigo'"))
+            with self.assertRaisesRegex(ValueError, 'Unexpected area roster'):
+                build.verify_staging(root / 'ratanaba')
+
+    def test_missing_boitata_encounter_is_rejected_before_android_export(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            build.prepare_bundle(root)
+            game = root / 'ratanaba/web/game.js'
+            game.write_text(game.read_text().replace('function boitataUpdate(dt)', 'function removedBossUpdate(dt)'))
+            with self.assertRaisesRegex(ValueError, 'Missing world / boss gameplay code'):
+                build.verify_staging(root / 'ratanaba')
+
     def test_missing_runtime_input_fails_before_compilation(self):
         original = build.runtime_files
         try:
