@@ -3,9 +3,9 @@ const assert=require('node:assert/strict'),vm=require('node:vm'),fs=require('nod
 async function fixture(){
  const calls=[],gradient={addColorStop(){}},ctx=new Proxy({createLinearGradient:()=>gradient,createRadialGradient:()=>gradient,drawImage(...args){calls.push(args);}},{get:(o,k)=>o[k]||(()=>{})});
  const nodes=new Map(),node=s=>{if(!nodes.has(s))nodes.set(s,{getContext:()=>ctx,style:{},classList:{toggle(){},add(){}},checked:false,hidden:false,addEventListener(){},removeEventListener(){},setPointerCapture(){},releasePointerCapture(){},getBoundingClientRect(){return {left:0,top:0,width:200,height:200};}});return nodes.get(s);};
- const local=new Map(),context={console,Math,JSON,Map,Set,Promise,Error,document:{querySelector:node,querySelectorAll:()=>[],body:node('body')},matchMedia:()=>({matches:false}),addEventListener(){},requestAnimationFrame(){},localStorage:{getItem:k=>local.get(k),setItem:(k,v)=>local.set(k,v)},Image:class{constructor(){this.naturalWidth=800;this.naturalHeight=800;this.complete=true;}set src(s){this._src=s;Promise.resolve().then(()=>this.onload?.());}},Audio:class{play(){return Promise.resolve();}pause(){}},window:{}};
+ const local=new Map(),context={console,Math,JSON,Map,Set,Promise,Error,document:{querySelector:node,querySelectorAll:()=>[],body:node('body')},matchMedia:()=>({matches:false}),addEventListener(){},rafQueue:[],requestAnimationFrame(fn){if(fn)this.rafQueue.push(fn);},localStorage:{getItem:k=>local.get(k),setItem:(k,v)=>local.set(k,v)},Image:class{constructor(){this.naturalWidth=800;this.naturalHeight=800;this.complete=true;}set src(s){this._src=s;Promise.resolve().then(()=>this.onload?.());}},Audio:class{play(){return Promise.resolve();}pause(){}},window:{}};
  vm.createContext(context);for(const file of ['elemental.js','game.js'])vm.runInContext(fs.readFileSync(path.join(__dirname,'..',file),'utf8'),context);
- await new Promise(resolve=>setImmediate(resolve));const g=context.window.Ratanaba;g.start();return {g,local,calls};
+ await new Promise(resolve=>setImmediate(resolve));const g=context.window.Ratanaba;g.start();return {g,local,calls,context};
 }
 const tests={
  'lethal boss charge ends the old encounter before recovery':async({g})=>{
@@ -39,6 +39,14 @@ const tests={
  'legacy Curupira-only save remains loadable and keeps the upper route':async({g,local})=>{
   local.set('ratanaba_web_v02',JSON.stringify({saveVersion:2,bossDead:true,checkpoint:{x:4750,y:620},seals:[true,true,true,true]}));
   assert.equal(g.restore(),true);assert.equal(g.state.boss.state,'dead');assert.equal(g.state.boitata.state,'dormant');assert.equal(g.state.p.x,4750);assert.equal(g.state.p.y,620);assert.equal(g.state.area,2);
+ }
+
+ , 'canvas rendering stays at or below 60 FPS on a simulated 120 Hz display':async({g,context})=>{
+  let now=0;
+  for(let i=0;i<240;i++){const cb=context.rafQueue.shift();assert.equal(typeof cb,'function');now+=1000/120;cb(now);}
+  assert(g.state.fps<=60,'render FPS must not exceed 60: '+g.state.fps);
+  assert(g.state.fps>=59,'render FPS should approach 60: '+g.state.fps);
+  assert.equal(g.state.targetFps,60);
  }
 };
 (async()=>{let failed=0;for(const [label,test] of Object.entries(tests)){try{await test(await fixture());console.log('PASS '+label);}catch(e){failed++;console.error('FAIL '+label+'\n'+e.stack);}}if(failed)process.exitCode=1;else console.log('RESULT '+JSON.stringify({passed:Object.keys(tests).length}));})();
