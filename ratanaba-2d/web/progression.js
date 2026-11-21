@@ -31,7 +31,7 @@
  function showHint(key,text,action){
   if(!ui)ensureUI();
   const kicker=$('#worldHintKicker'),copy=$('#worldHintText'),button=$('#worldHintAction');
-  if(key!==lastHint||text!==copy.textContent){lastHint=key;kicker.textContent=key==='chest'?'TESOURO PRÓXIMO':key==='totem'?'PUZZLE DESCOBERTO':'DICA DE JOGO';copy.textContent=text;ui.classList.add('visible');}
+  if(key!==lastHint||text!==copy.textContent){lastHint=key;lastShown=state()?.t||0;kicker.textContent=key==='chest'?'TESOURO PRÓXIMO':key==='totem'?'PUZZLE DESCOBERTO':'DICA DE JOGO';copy.textContent=text;ui.classList.add('visible');}
   if(action){button.hidden=false;button.textContent=action;}else button.hidden=true;
  }
  function hideHint(){if(ui)ui.classList.remove('visible');lastHint='';activeChest=null;}
@@ -63,9 +63,7 @@
  const install=()=>{
   ensureUI();read();
   const g=game();if(!g)return;
-  const persist=g.persist,restore=g.restore,start=g.start;
-  if(typeof persist==='function')g.persist=function(){persist();try{const raw=JSON.parse(localStorage.getItem('ratanaba_web_v02')||'{}');raw.worldInteractions={opened:[...opened],seen:[...seen]};localStorage.setItem('ratanaba_web_v02',JSON.stringify(raw));}catch{}};
-  if(typeof restore==='function')g.restore=function(){const ok=restore();try{const raw=JSON.parse(localStorage.getItem('ratanaba_web_v02')||'{}');if(raw.worldInteractions){opened=new Set(raw.worldInteractions.opened||[]);seen=new Set(raw.worldInteractions.seen||[]);}}catch{}return ok;};
+  const start=g.start;
   if(typeof start==='function')g.start=function(fromSave=false){if(!fromSave){opened.clear();seen.clear();save();}return start(fromSave);};
   const frame=()=>{update();requestAnimationFrame(frame);};requestAnimationFrame(frame);
  };
