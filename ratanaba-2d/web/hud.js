@@ -22,6 +22,11 @@
    ['CURUPIRA','Meus rastros… mentiram para o chão.\nQuerendo o ontem, o amanhã eu… ceguei.','curupira'],
    ['CURUPIRA','O tempo é um laço que o código não desata.\nLeve meu rastro. Não olhe.','curupira'],
    ['O BANIDO','Onde houve busca, que agora haja o Nada.\nDescansa. Eu carregarei a memória.','banido']
+  ],
+  boitata_farewell:[
+   ['O BANIDO','A última brasa… não era fome. Era memória.\\nA floresta ainda se lembra do que eu protegia.','banido'],
+   ['O BANIDO','O fogo não apagou o caminho. Apenas revelou\\numa trilha mais antiga, sob as raízes do mundo.','banido'],
+   ['O BANIDO','Além do Vale das Brasas, um novo território desperta.\\nAs ruínas chamam pelo terceiro Guardião.','banido']
   ]
  };
  let seen=new Set(),active=null,line=0,shown=0,typeTime=0,last=performance.now(),focusBefore=null;
