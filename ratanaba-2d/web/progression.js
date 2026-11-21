@@ -35,7 +35,7 @@
   if(action){button.hidden=false;button.textContent=action;}else button.hidden=true;
  }
  function hideHint(){if(ui)ui.classList.remove('visible');lastHint='';activeChest=null;}
- function nearestChest(s){let best=null,dist=Infinity;for(const c of CHESTS){if(opened.has(c.id))continue;const d=Math.hypot(s.p.x-c.x,s.p.y-c.y);if(d<dist){dist=d;best=c;}}return best&&dist<105?best:null;}
+ function nearestChest(s){let best=null,dist=Infinity;for(const c of CHESTS){if(opened.has(c.id))continue;const dx=Math.abs(s.p.x-c.x),dy=Math.abs(s.p.y-c.y);if(dx>100||dy>260)continue;const d=dx+Math.max(0,dy-150)*.25;if(d<dist){dist=d;best=c;}}return best;}
  function openNearbyChest(){
   const s=state(),c=activeChest;if(!s?.running||s.paused||s.cinematic||!c||opened.has(c.id))return false;
   const added=window.RatanabaRPG?.addItem(c.item,1,s)||0;
