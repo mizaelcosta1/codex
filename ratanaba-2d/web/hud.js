@@ -24,7 +24,7 @@
    ['O BANIDO','Onde houve busca, que agora haja o Nada.\nDescansa. Eu carregarei a memória.','banido']
   ],
   boitata_farewell:[
-   ['BOI-TATÁ','A última brasa… não era fome. Era memória.\\nA floresta ainda se lembra do que eu protegia.','boitata'],
+   ['O BANIDO','A última brasa… não era fome. Era memória.\\nA floresta ainda se lembra do que eu protegia.','banido'],
    ['O BANIDO','O fogo não apagou o caminho. Apenas revelou\\numa trilha mais antiga, sob as raízes do mundo.','banido'],
    ['O BANIDO','Além do Vale das Brasas, um novo território desperta.\\nAs ruínas chamam pelo terceiro Guardião.','banido']
   ]
